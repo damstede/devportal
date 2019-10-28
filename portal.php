@@ -1,5 +1,9 @@
 <?PHP
-
+    session_start();
+    if (!isset($_SESSION["zermelo_access_token"]) || empty($_SESSION["zermelo_access_token"])) {
+        header("Location: link.php", 301);
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="nl">

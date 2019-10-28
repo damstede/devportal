@@ -18,15 +18,16 @@
                     scanner.destroy();
                     scanner = null;
                     console.log("QR-scanner gestopt");
+                    document.getElementById("loading").style.display = "none";
                     var zResult = JSON.parse(result);
                     if (zResult["institution"] === "damstedelyceum") {
                         document.getElementById('zermelo-code').value = zResult["code"];
                         showAction('zermelolink');
+                        document.getElementById("zermelo-code-form").submit();
                     }
                     else {
                         alert("School wordt niet ondersteund. Dit portaal is alleen bedoeld voor het Damstede Lyceum.");
                     }
-                    document.getElementById("loading").style.display = "none";
                 });
             }
         });
@@ -104,22 +105,24 @@
         <div class="action" id="zermelolink" style="display: none;">
             <div class="inneraction">
                 <div class="actioncontent">
-                    <div class="actionheader">Toegangscode invullen</div>
-                    <div class="actionclose" data-action="zermelolink" onclick="hideAction(this);">&#x2716;</div>
-                    <table class="actiontable">
-						<tr>
-							<th>Schoolnaam</th>
-							<td><input type="text" readonly id="zermelo-school" name="zermelo-school" autocomplete="off" placeholder="Bijv. damstedelyceum" size="65" value="damstedelyceum" /></td>
-                        </tr>
-                        <tr>
-							<th>Toegangscode</th>
-							<td><input type="number" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="Bijv. 701510603377" size="65" value="" /></td>
-						</tr>
-					</table>
-                    <div class="actionbuttons">
-                        <input class="button extra" type="button" value="Annuleren" data-action="zermelolink" onclick="hideAction(this);" />
-                        <input class="button" type="submit" value="Inloggen" name="login" onclick="document.getElementById('loading').style.display = 'table';" />
-                    </div>
+                    <form id="zermelo-code-form" action="import/link-cb.php" method="post" target="_self" accept-charset="utf-8" autocomplete="off" onsubmit="document.getElementById('loading').style.display = 'table';">  
+                        <div class="actionheader">Toegangscode invullen</div>
+                        <div class="actionclose" data-action="zermelolink" onclick="hideAction(this);">&#x2716;</div>
+                        <table class="actiontable">
+                            <tr>
+                                <th>Schoolnaam</th>
+                                <td><input required type="text" readonly id="zermelo-school" name="zermelo-school" autocomplete="off" placeholder="Bijv. damstedelyceum" size="65" value="damstedelyceum" /></td>
+                            </tr>
+                            <tr>
+                                <th>Toegangscode</th>
+                                <td><input required type="number" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="Bijv. 701510603377" size="65" value="" /></td>
+                            </tr>
+                        </table>
+                        <div class="actionbuttons">
+                            <input class="button extra" type="button" value="Annuleren" data-action="zermelolink" onclick="hideAction(this);" />
+                            <input class="button" type="submit" value="Inloggen" name="login" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
