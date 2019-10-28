@@ -14,19 +14,30 @@
             if (hasCamera) {
                 scanner = new QrScanner(document.getElementById('qr-preview'), function(result) {
                     console.log(result);
-                    document.getElementById("loading").style.display = "table";
-                    scanner.destroy();
-                    scanner = null;
-                    console.log("QR-scanner gestopt");
-                    document.getElementById("loading").style.display = "none";
-                    var zResult = JSON.parse(result);
-                    if (zResult["institution"] === "damstedelyceum") {
-                        document.getElementById('zermelo-code').value = zResult["code"];
-                        showAction('zermelolink');
-                        document.getElementById("zermelo-code-form").submit();
+                    try {
+                        var zResult = JSON.parse(result);
+                        if (Object.keys(zResult).indexOf("code") == -1 || Object.keys(zResult).indexOf("institution") == -1) {
+                            alert("Ongeldige Zermelo QR-code");
+                        }
+                        else {
+                            document.getElementById("loading").style.display = "table";
+                            scanner.destroy();
+                            scanner = null;
+                            console.log("QR-scanner gestopt");
+                            document.getElementById("loading").style.display = "none";
+                            if (zResult["institution"] === "damstedelyceum") {
+                                document.getElementById('zermelo-code').value = zResult["code"];
+                                showAction('zermelolink');
+                                document.getElementById("zermelo-code-form").submit();
+                            }
+                            else {
+                                alert("School wordt niet ondersteund. Dit portaal is alleen bedoeld voor het Damstede Lyceum.");
+                            }
+                        }
                     }
-                    else {
-                        alert("School wordt niet ondersteund. Dit portaal is alleen bedoeld voor het Damstede Lyceum.");
+                    catch(e) {
+                        console.log(e);
+                        alert("Ongeldige Zermelo QR-code");
                     }
                 });
             }
@@ -111,11 +122,11 @@
                         <table class="actiontable">
                             <tr>
                                 <th>Schoolnaam</th>
-                                <td><input required type="text" readonly id="zermelo-school" name="zermelo-school" autocomplete="off" placeholder="Bijv. damstedelyceum" size="65" value="damstedelyceum" /></td>
+                                <td><input required type="text" readonly id="zermelo-school" name="zermelo-school" autocomplete="off" placeholder=">schoolnaam<.zportal.nl" size="65" value="damstedelyceum" /></td>
                             </tr>
                             <tr>
                                 <th>Toegangscode</th>
-                                <td><input required type="number" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="Bijv. 701510603377" size="65" value="" /></td>
+                                <td><input required type="number" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="XXX XXX XXX XXX" size="65" min="0" max="999999999999" value="" /></td>
                             </tr>
                         </table>
                         <div class="actionbuttons">

@@ -84,7 +84,7 @@
             }
         }
         else {
-            returnError("Er ging iets mis bij het inloggen. Probeer het later opnieuw of neem contact op met de systeembeheerder. Foutmelding: kon geen Zermelo access token verkrijgen (HTTP ERROR 400). Toegangscode: ".$_POST["zermelo-code"]);
+            returnError("Er ging iets mis bij het inloggen. Druk opnieuw op koppel app om de toegangscode te vernieuwen (in Zermelo) en probeer het nogmaals.");
         }
     }
     else {
