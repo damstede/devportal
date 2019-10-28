@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <h1 id="pagetitle">Device Portaal</h1>
+        <h1 id="pagetitle">Damstede Device Portaal</h1>
     </header>
     <div id="content">
         <p>Test</p>
