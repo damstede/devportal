@@ -71,6 +71,7 @@
                 if ($user["isEmployee"] === true) {
                     $_SESSION["zermelo_access_token"] = $accessData["access_token"];
                     $_SESSION["zermelo_expires_in"] = time() + intval($accessData["expires_in"]);
+                    $_SESSION["zermelo_school"] = $_POST["zermelo-school"];
                     $_SESSION["user"] = $user;
     
                     returnData("Login successvol", $_SESSION);
