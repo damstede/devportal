@@ -9,16 +9,110 @@
 <html lang="nl">
 <head>
     <title>Damstede Device Portaal</title>
-    <link rel="stylesheet" href="opmaak.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="icon" type="image/ico" href="favicon.ico" />
+    <?PHP include_once("import/headers.html"); ?>
 </head>
 <body>
     <header>
         <h1 id="pagetitle">Damstede Device Portaal</h1>
+        <div id="pageoptions">
+            <div class="awesome" id="signout" title="Uitloggen" onclick="window.location.href='unlink.php';">&#xf08b;</div>
+        </div>
     </header>
     <div id="content">
-        <p>Test</p>
+        <table class="schedule">
+            <thead>
+                <tr>
+                    <th class="hour"></th>
+                    <th class="day"><span class="dayname">Ma</span><span class="daydate">4-11</day></th>
+                    <th class="day"><span class="dayname">Di</span><span class="daydate">5-11</day></th>
+                    <th class="day"><span class="dayname">Wo</span><span class="daydate">6-11</day></th>
+                    <th class="day"><span class="dayname">Do</span><span class="daydate">7-11</day></th>
+                    <th class="day"><span class="dayname">Vr</span><span class="daydate">8-11</day></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="hour">1.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">2.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">3.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour break"></th>
+                    <td class="lesson break" colspan="5"></td>
+                </tr>
+                <tr>
+                    <th class="hour">4.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">5.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour break"></th>
+                    <td class="lesson break" colspan="5"></td>
+                </tr>
+                <tr>
+                    <th class="hour">6.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">7.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">8.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+                <tr>
+                    <th class="hour">9.</th>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                    <td class="lesson"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

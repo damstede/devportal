@@ -7,6 +7,7 @@ html, body {
 html {
 	padding: 0px;
 	margin: 0px;
+	background-color: #2A2A2A;
 }
 
 body {
@@ -16,6 +17,9 @@ body {
 	padding: 0px;
 	margin: 0px;
 	cursor: default;
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
 }
 
 a, a:visited {
@@ -74,6 +78,10 @@ header #pageoptions > * {
 	text-shadow: 0px 0px 0px #FFFFFF;
 }
 
+header #pageoptions .awesome {
+	font-family: FontAwesome;
+}
+
 header #pageoptions > *:hover {
 	color: #FFFFFF;
 	text-shadow: 0px 0px 2px #FFFFFF;
@@ -81,7 +89,7 @@ header #pageoptions > *:hover {
 }
 
 #content {
-	padding: 16px 2px;
+	padding: 16px 8px;
 }
 
 #content.extrapadding {
@@ -387,6 +395,46 @@ input[type=checkbox]:hover, input[type=checkbox]:active {
 label {
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.schedule {
+	width: 100%;
+	background: rgba(255,255,255,0.1);
+}
+
+.schedule th, .schedule td {
+	padding: 4px 6px;
+}
+
+.day, .hour {
+	background: rgba(0,0,0,0.5);
+}
+
+.day {
+	text-align: center;
+}
+
+.dayname {
+	display: block;
+}
+
+.daydate {
+	display: block;
+}
+
+.hour {
+	text-align: right;
+	width: 28px;
+	padding-right: 10px !important;
+}
+
+.hour.break, .lesson.break {
+	height: 12px;
+}
+
+.lesson:not(.break) {
+	background: rgba(255,255,255,0.1);
+	height: 48px;
 }
 
 #spinner {
