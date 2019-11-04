@@ -28,7 +28,7 @@
                             if (zResult["institution"] === "damstedelyceum") {
                                 document.getElementById('zermelo-code').value = zResult["code"];
                                 showAction('zermelolink');
-                                document.getElementById("zermelo-code-form").submit();
+                                submitZermelo();
                             }
                             else {
                                 alert("School wordt niet ondersteund. Dit portaal is alleen bedoeld voor het Damstede Lyceum.");
@@ -52,7 +52,7 @@
                 }).catch(function(e) {
                     alert("Een onverwachte fout is opgetreden.\nGebruik een toegangscode om in te loggen op dit apparaat.");
                     document.getElementById("loading").style.display = "none";
-                })
+                });
             }
             else {
                 alert("Geen camera's gevonden om te gebruiken, of je hebt geen toegang tot je camera gegeven.\nGebruik een toegangscode om in te loggen op dit apparaat.");
@@ -99,6 +99,53 @@
             action.style.display = "none";
         }
         </script>
+        <script>
+        function submitZermelo() {
+            console.log("Form submit");
+            document.getElementById('loading').style.display = 'table';
+            var form = document.getElementById('zermelo-code-form');
+            var loginError = document.getElementById("loginerror-msg");
+            var data = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', form.getAttribute('action'), true);
+            xhr.onload = function() {
+                document.getElementById('loading').style.display = 'none';
+                if (xhr.status !== 200) {
+                    loginError.innerHTML = "Serverfout "+xhr.statusText+". Probeer het later opnieuw.";
+                    showAction('loginerror');
+                }
+                else {
+                    var loginResponse = JSON.parse(xhr.responseText);
+                    switch (loginResponse.type) {
+                        case "success": {
+                            document.getElementById('loading').style.display = 'table';
+                            window.location.href = "portal.php";
+                            break;
+                        }
+                        default: {
+                            loginError.innerHTML = loginResponse.message;
+                            showAction('loginerror');
+                            break;
+                        }
+                    }
+                }
+            };
+            xhr.send(data);
+        }
+        </script>
+
+        <div class="action" id="loginerror" style="display: none;">
+            <div class="inneraction">
+                <div class="actioncontent">
+                    <div class="actionheader">Er ging iets fout</div>
+                    <div class="actionclose" data-action="loginerror" onclick="hideAction(this);">&#x2716;</div>
+                    <p id="loginerror-msg">Een onbekende fout is opgetreden. Probeer het later opnieuw.</p>
+                    <div class="actionbuttons">
+                        <input class="button" type="button" value="Oké" data-action="loginerror" onclick="hideAction(this);" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="action" id="qrscanner" style="display: none;">
             <div class="inneraction">
@@ -116,7 +163,7 @@
         <div class="action" id="zermelolink" style="display: none;">
             <div class="inneraction">
                 <div class="actioncontent">
-                    <form id="zermelo-code-form" action="import/link-cb.php" method="post" target="_self" accept-charset="utf-8" autocomplete="off" onsubmit="document.getElementById('loading').style.display = 'table';">  
+                    <form id="zermelo-code-form" action="import/link-cb.php" method="post" target="_self" accept-charset="utf-8" autocomplete="off">  
                         <div class="actionheader">Toegangscode invullen</div>
                         <div class="actionclose" data-action="zermelolink" onclick="hideAction(this);">&#x2716;</div>
                         <table class="actiontable">
@@ -131,7 +178,7 @@
                         </table>
                         <div class="actionbuttons">
                             <input class="button extra" type="button" value="Annuleren" data-action="zermelolink" onclick="hideAction(this);" />
-                            <input class="button" type="submit" value="Inloggen" name="login" />
+                            <input class="button" type="button" value="Inloggen" name="login" onclick="submitZermelo();"/>
                         </div>
                     </form>
                 </div>
