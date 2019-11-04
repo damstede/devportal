@@ -471,3 +471,15 @@ label {
 :-moz-placeholder { /* Firefox 18- */
 	color: #999999;
 }
+
+::-moz-selection {
+	color: #FFFFFF;
+	background-color: rgba(181, 19, 27, 0.99);
+	text-shadow: none;
+}
+
+::selection {
+	color: #FFFFFF;
+	background-color: rgba(181, 19, 27, 0.99);
+	text-shadow: none;
+}
