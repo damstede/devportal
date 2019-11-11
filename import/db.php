@@ -60,6 +60,41 @@
             return $cart;
         }
 
+        public function isReserved($cartId, $date, $hour) {
+            $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' LIMIT 1");
+            if ($result != false) {
+                if (mysqli_num_rows($result) > 0) {
+                    return $this->formatReservation(mysqli_fetch_assoc($result));
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
+        public function reserveCart($cartId, $date, $hour, $location, $user, $teacher) {
+            if ($this->isReserved($cartId, $date, $hour) == false) {
+                $result = $this->runQuery("INSERT INTO damstede.cartreservations (cart_id, date, hour, location, user, teacher) VALUES ('".intval($cartId)."', '".date("Y-m-d", strtotime($date))."', '".intval($hour)."', '".$this->makeSafe($location)."', '".$this->makeSafe($user)."', '".$this->makeSafe($teacher)."')");
+                if ($result != false) {
+                    if (mysqli_affected_rows($this->connection) > 0) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
         private function formatReservation($res) {
             $res["id"] = intval($res["id"]);
             $res["cart_id"] = intval($res["cart_id"]);

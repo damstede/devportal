@@ -97,6 +97,10 @@ header #pageoptions > *:hover {
     padding-right: 32px;
 }
 
+#content.nopadding {
+	padding: 0px 0px !important;
+}
+
 .action {
 	display: table;
 	position: fixed;
@@ -256,6 +260,7 @@ header #pageoptions > *:hover {
 	color: #EDEDED;
 	font-size: 15px;
 	transition: 0.15s;
+	outline: 0;
 }
 
 .actionbuttons .button.extra, button.extra {
@@ -359,17 +364,22 @@ select {
 	margin-top: 4px;
 	margin-bottom: 4px;
 	cursor: default;
-	background-color: #444444;
-	background: #444444;
+	background-color: #333333;
 	color: #EDEDED;
 	font-family: robotolight, Roboto, roboto, Arial, sans-serif;
 	font-size: 14px;
 	border: solid #333333 1px;
 	border-radius: 3px;
 	transition: 0.15s;
+	outline: 0;
 }
 
-select:focus, select:hover, select:active {
+select:focus, select:hover {
+	background-color: #444444;
+	transition: 0.05s;
+}
+
+select:active {
 	background-color: #555555;
 	outline: 0 !important;
 	transition: 0.05s;
@@ -471,6 +481,7 @@ label {
 	line-height: 14px;
 	font-size: 24px;
 	padding: 0px 6px;
+	margin: 0px 4px;
 	opacity: 0;
 	transition: 0.15s;
 	pointer-events: none;
@@ -485,6 +496,7 @@ label {
 	opacity: 1;
 	height: initial;
 	padding: 12px 6px;
+	margin: 4px 4px;
 	transition: 0.05s;
 	pointer-events: initial;
 }
@@ -539,5 +551,11 @@ label {
 @media screen and (max-width: 850px) {
 	.location-prefix {
 		display: none;
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.actiontable th {
+		width: 80px;
 	}
 }
