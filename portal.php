@@ -116,9 +116,11 @@
         </table>
     </div>
     <script>
-    schedule.getCurrentWeekInfo().then(function(weekInfo) {
-        schedule.get(weekInfo[0], weekInfo[1]).then(function(reservations) {
-            schedule.load(reservations);
+    schedule.init().then(function() {
+        schedule.getCurrentWeekInfo().then(function(weekInfo) {
+            schedule.get(weekInfo[0], weekInfo[1]).then(function(reservations) {
+                schedule.load(reservations);
+            });
         });
     });
     </script>

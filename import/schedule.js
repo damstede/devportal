@@ -1,11 +1,31 @@
 var schedule = {
-    default: null,
-    init: function() {
+    defaults: null,
+    carts: [],
 
+    init: function() {
+        return new Promise(function(resolve, reject) {
+            schedule["defaults"] = document.getElementsByClassName("schedule")[0].innerHTML;
+
+            var cartsReq = new XMLHttpRequest();
+            cartsReq.open('POST', 'import/dcarts.php');
+            cartsReq.onload = function() {
+                try {
+                    var response = JSON.parse(cartsReq.responseText);
+                    for (var i = 0; i < response["data"].length; i++) {
+                        schedule.carts[response["data"][i]["id"]] = response["data"][i];
+                    }
+                    resolve();
+                }
+                catch(e) {
+                    reject(e);
+                }
+            };
+            cartsReq.send();
+        });
     },
 
     clear: function() {
-
+        document.getElementsByClassName("schedule")[0].innerHTML = schedule["defaults"];
     },
 
     get: function(year, week) {
@@ -61,6 +81,7 @@ var schedule = {
         for (var i = 0; i < reservationCount; i++) {
             document.getElementById("week-hour-"+reservations[i]["hour"]).children[reservations[i]["day"]+1].appendChild(schedule.createResElem(reservations[i]));
         }
+        schedule.fillInResAddBtns();
     },
 
     createResElem: function(res) {
@@ -69,7 +90,26 @@ var schedule = {
         if (res["cancelled"]) {
             resElem.className += " cancelled";
         }
-        resElem.innerHTML = "Kar " + res["cart_id"] + ", gereserveerd door " + res["user"] + " namens " + res["teacher"] + " in lokaal " + res["location"];
+        var contents = '<b>Kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + '),<span class="location-prefix"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
+        if (res["teacher"] != null) {
+            contents += ', namens:<br/><i>' + res["teacher"] + '</i>';
+        }
+        resElem.innerHTML = contents;
         return resElem;
+    },
+
+    fillInResAddBtns: function() {
+        var resAddBtn = document.createElement("div");
+        resAddBtn.className = "reservation add-btn";
+        resAddBtn.innerHTML = "+";
+        resAddBtn.setAttribute("title", "Kar reserveren");
+
+        var lessons = document.getElementsByClassName("lesson");
+        var lessonCount = lessons.length;
+        for (var i = 0; i < lessonCount; i++) {
+            if (lessons[i].className.indexOf("break") < 0) {
+                lessons[i].appendChild(resAddBtn.cloneNode(true));
+            }
+        }
     }
 };
