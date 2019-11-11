@@ -22,12 +22,12 @@
         }
 
         private function getStartAndEndDate($year, $week) {
-            // from https://stackoverflow.com/questions/4861384/php-get-start-and-end-date-of-a-week-by-weeknumber
+            // modified from https://stackoverflow.com/questions/4861384/php-get-start-and-end-date-of-a-week-by-weeknumber
             $dto = new DateTime();
             $dto->setISODate($year, $week);
             $ret = array();
             array_push($ret, $dto->format('Y-m-d'));
-            $dto->modify('+6 days');
+            $dto->modify('+4 days');
             array_push($ret, $dto->format('Y-m-d'));
             return $ret;
         }
