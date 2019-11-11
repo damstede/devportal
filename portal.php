@@ -10,6 +10,7 @@
 <head>
     <title>Damstede Device Portaal</title>
     <?PHP include_once("import/headers.html"); ?>
+    <script src="import/schedule.js"></script>
 </head>
 <body>
     <header>
@@ -23,15 +24,15 @@
             <thead>
                 <tr>
                     <th class="hour"></th>
-                    <th class="day"><span class="dayname">Ma</span><span class="daydate">4-11</day></th>
-                    <th class="day"><span class="dayname">Di</span><span class="daydate">5-11</day></th>
-                    <th class="day"><span class="dayname">Wo</span><span class="daydate">6-11</day></th>
-                    <th class="day"><span class="dayname">Do</span><span class="daydate">7-11</day></th>
-                    <th class="day"><span class="dayname">Vr</span><span class="daydate">8-11</day></th>
+                    <th class="day"><span class="dayname">Ma</span><span class="daydate"></span></th>
+                    <th class="day"><span class="dayname">Di</span><span class="daydate"></span></th>
+                    <th class="day"><span class="dayname">Wo</span><span class="daydate"></span></th>
+                    <th class="day"><span class="dayname">Do</span><span class="daydate"></span></th>
+                    <th class="day"><span class="dayname">Vr</span><span class="daydate"></span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr id="week-hour-1">
                     <th class="hour">1.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -39,7 +40,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-2">
                     <th class="hour">2.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -47,7 +48,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-3">
                     <th class="hour">3.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -59,7 +60,7 @@
                     <th class="hour break"></th>
                     <td class="lesson break" colspan="5"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-4">
                     <th class="hour">4.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -67,7 +68,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-5">
                     <th class="hour">5.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -79,7 +80,7 @@
                     <th class="hour break"></th>
                     <td class="lesson break" colspan="5"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-6">
                     <th class="hour">6.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -87,7 +88,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-7">
                     <th class="hour">7.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -95,7 +96,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-8">
                     <th class="hour">8.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -103,7 +104,7 @@
                     <td class="lesson"></td>
                     <td class="lesson"></td>
                 </tr>
-                <tr>
+                <tr id="week-hour-9">
                     <th class="hour">9.</th>
                     <td class="lesson"></td>
                     <td class="lesson"></td>
@@ -114,5 +115,12 @@
             </tbody>
         </table>
     </div>
+    <script>
+    schedule.getCurrentWeekInfo().then(function(weekInfo) {
+        schedule.get(weekInfo[0], weekInfo[1]).then(function(reservations) {
+            schedule.load(reservations);
+        });
+    });
+    </script>
 </body>
 </html>
