@@ -45,6 +45,8 @@
         returnError("Je bent niet (meer) ingelogd! Log opnieuw in.");
     }
     else {
+		returnError("Deze functie werkt (nog) niet. Probeer het later opnieuw.");
+		/*
         $ch = curl_init();
         $url = "https://".$_SESSION["zermelo_school"].".zportal.nl/api/v3/appointments/?user=~me&start=".strtotime("04-11-2019")."&end".strtotime("08-11-2019")."&access_token=".$_SESSION["zermelo_access_token"];
         echo $url;
@@ -54,7 +56,8 @@
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         curl_close($ch);
-        echo $result;
+		echo $result;
+		*/
         /*
         $json = json_decode($result, true)["response"];
         if (count($json["data"]) > 0) {
