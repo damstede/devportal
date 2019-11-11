@@ -40,6 +40,41 @@
     }
 
     session_start();
+
+    function signInUsingAccessToken($accessToken, $expiresIn, $zermeloSchool) {
+        $ch = null;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://".$_POST["zermelo-school"].".zportal.nl/api/v3/users/~me?access_token=".$accessToken);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->secure);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $json = json_decode($result, true)["response"];
+        if (count($json["data"]) > 0) {
+            $user = $json["data"][0];
+            if ($user["isEmployee"] === true) {
+                // set session data
+                $_SESSION["zermelo_access_token"] = $accessToken;
+                $_SESSION["zermelo_expires_in"] = $expiresIn;
+                $_SESSION["zermelo_school"] = $zermeloSchool;
+                $_SESSION["user"] = $user;
+
+                // set cookie for future automatic logins
+                setcookie("zat", $_SESSION["zermelo_access_token"], 2147483647, "/");
+                setcookie("zei", $_SESSION["zermelo_expires_in"], 2147483647, "/");
+                setcookie("zs", $_SESSION["zermelo_school"], 2147483647, "/");
+
+                returnData("Login successvol", $_SESSION);
+            }
+            else {
+                returnError("Je hebt onvoldoende rechten om in te loggen bij het Device Portaal van Damstede.");
+            }
+        }
+        else {
+            returnError("Er ging iets mis bij het inloggen. Probeer het later opnieuw of neem contact op met de systeembeheerder. Foutmelding: kon geen gebruikersinformatie verkrijgen. Access token: ".$accessToken.". DEEL DEZE ACCESS TOKEN ENKEL MET DE SYSTEEMBEHEERDER");
+        }
+    }
     
     if (isset($_POST["zermelo-school"]) && !empty($_POST["zermelo-school"]) && isset($_POST["zermelo-code"]) && !empty($_POST["zermelo-code"])) {
         if ($_POST["zermelo-school"] !== "damstedelyceum") {
@@ -57,36 +92,14 @@
         if (!empty($result)) {
             $accessData = json_decode($result, true);
     
-            $ch = null;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://".$_POST["zermelo-school"].".zportal.nl/api/v3/users/~me?access_token=".$accessData["access_token"]);
-            curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
-            // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->secure);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-            $json = json_decode($result, true)["response"];
-            if (count($json["data"]) > 0) {
-                $user = $json["data"][0];
-                if ($user["isEmployee"] === true) {
-                    $_SESSION["zermelo_access_token"] = $accessData["access_token"];
-                    $_SESSION["zermelo_expires_in"] = time() + intval($accessData["expires_in"]);
-                    $_SESSION["zermelo_school"] = $_POST["zermelo-school"];
-                    $_SESSION["user"] = $user;
-    
-                    returnData("Login successvol", $_SESSION);
-                }
-                else {
-                    returnError("Je hebt onvoldoende rechten om in te loggen bij het Device Portaal van Damstede.");
-                }
-            }
-            else {
-                returnError("Er ging iets mis bij het inloggen. Probeer het later opnieuw of neem contact op met de systeembeheerder. Foutmelding: kon geen gebruikersinformatie verkrijgen. Access token: ".$accessData["access_token"].". DEEL DEZE ACCESS TOKEN ENKEL MET DE SYSTEEMBEHEERDER");
-            }
+            signInUsingAccessToken($accessData["access_token"], time() + intval($accessData["expires_in"]), $_POST["zermelo-school"]);
         }
         else {
             returnError("Er ging iets mis bij het inloggen. Druk opnieuw op koppel app om de toegangscode te vernieuwen (in Zermelo) en probeer het nogmaals.");
         }
+    }
+    else if (isset($_COOKIE["zat"]) && !empty($_COOKIE["zat"]) && isset($_COOKIE["zei"]) && !empty($_COOKIE["zei"]) && isset($_COOKIE["zs"]) && !empty($_COOKIE["zs"])) {
+        signInUsingAccessToken($_COOKIE["zat"], $_COOKIE["zei"], $_COOKIE["zs"]);
     }
     else {
         returnError("Onvoldoende data ontvangen: POST fields zermelo-school en zermelo-code missen");

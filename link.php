@@ -1,6 +1,3 @@
-<?PHP
-
-?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -62,6 +59,13 @@
         window.pauseCameraAccess = function() {
             scanner.pause();
         }
+    </script>
+    <script>
+    function getCookie(name) {
+		var re = new RegExp(name + "=([^;]+)");
+		var value = re.exec(document.cookie);
+		return (value != null) ? unescape(value[1]) : null;
+    }
     </script>
 </head>
 <body onload="document.getElementById('loading').style.display = 'none';">
@@ -192,6 +196,13 @@
 				<div id="spinner"></div>
 			</div>
 		</div>
-	</div>
+    </div>
+    
+    <script>
+    if (getCookie("zat") != null && getCookie("zei") != null && getCookie("zs") != null && getCookie("zat") != undefined && getCookie("zei") != undefined && getCookie("zs") != undefined && getCookie("zat") != "" && getCookie("zei") != "" && getCookie("zs") != "") {
+        console.log("Logging in via cookies...");
+        submitZermelo();
+    }
+    </script>
 </body>
 </html>
