@@ -614,7 +614,7 @@ label {
 
 @media screen and (max-width: 850px) {
 	.extra-info {
-		display: none;
+		display: none !important;
 	}
 
 	.week-changer a {
@@ -626,7 +626,7 @@ label {
 
 @media screen and (max-width: 650px) {
 	.extra-extra-info {
-		display: none;
+		display: none !important;
 	}
 
 	.actiontable th {

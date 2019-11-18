@@ -71,6 +71,9 @@
 <body onload="document.getElementById('loading').style.display = 'none';">
     <header>
         <h1 id="pagetitle">Log in via Zermelo - Damstede Device Portaal</h1>
+        <div id="pageoptions">
+            <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
+        </div>
     </header>
     <div id="content" class="extrapadding">
         <p><b>Om gebruik te kunnen maken van het Device Portaal en een iPad-kar voor je les te reserveren, moet je inloggen via Zermelo:</b></p>

@@ -17,9 +17,11 @@
 </head>
 <body>
     <header>
-        <h1 id="pagetitle">Damstede Device Portaal</h1>
+        <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span></h1>
         <div id="pageoptions">
-            <div id="addreservation" title="Kar reserveren" onclick="showAction('reservationadder'); setUpReservationAdder('','');">+</div>
+            <div class="extra-extra-info" id="addreservation" title="Kar reserveren" onclick="showAction('reservationadder'); setUpReservationAdder('','');">+</div>
+            <div class="awesome" id="info" title="Informatie" onclick="showAction('basic-info');">&#xf05a;</div>
+            <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
             <div class="awesome" id="signout" title="Uitloggen (ingelogd als <?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>)" onclick="window.location.href='unlink.php';">&#xf08b;</div>
         </div>
     </header>
@@ -312,6 +314,19 @@
                 <p id="cancel-message">Er is een onbekende fout opgetreden. Probeer het later opnieuw.</p>
                 <div class="actionbuttons">
                     <input class="button" type="button" value="Oké" data-action="cancelmessage" onclick="hideAction(this);" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action" id="basic-info" style="display: none;">
+        <div class="inneraction">
+            <div class="actioncontent">
+                <div class="actionheader">Informatie</div>
+                <div class="actionclose" data-action="basic-info" onclick="hideAction(this);">&#x2716;</div>
+                <p>Locaties apparaatkarren: <br/><i>nog niet bekend</i></p>
+                <div class="actionbuttons">
+                    <input class="button" type="button" value="Sluiten" data-action="basic-info" onclick="hideAction(this);" />
                 </div>
             </div>
         </div>
