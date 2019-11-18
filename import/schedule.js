@@ -30,6 +30,11 @@ var schedule = {
         schedule.dates = ["", "", "", "", ""];
         schedule.currentlyLoaded = [0, 0];
         document.getElementsByClassName("schedule")[0].innerHTML = schedule["defaults"];
+        document.getElementsByClassName("week-name")[0].innerHTML = "bezig met laden...";
+        var dayDates = document.getElementsByClassName("daydate");
+        for (var i = 0; i < 5; i++) {
+            dayDates[i].innerHTML = "";
+        }
     },
 
     reload: function() {
@@ -44,6 +49,7 @@ var schedule = {
             dateReq.onload = function() {
                 schedule.clear();
                 schedule.currentlyLoaded = [year, week];
+                document.getElementsByClassName("week-name")[0].innerHTML = "week " + week;
                 var dayDates = document.getElementsByClassName("daydate");
                 var dates = dateReq.responseText.split(" ");
                 for (var i = 0; i < 5; i++) {

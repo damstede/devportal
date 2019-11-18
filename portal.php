@@ -28,6 +28,12 @@
             <thead>
                 <tr>
                     <th class="hour"></th>
+                    <td class="week-changer prev"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]-1)">&#x2B98; vorige week</a></td>
+                    <td class="week-name" colspan="3">bezig met laden...</td>
+                    <td class="week-changer next"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]+1)">volgende week &#x2B9A;</a></td>
+                </tr>
+                <tr>
+                    <th class="hour"></th>
                     <th class="day"><span class="dayname">Ma</span><span class="daydate"></span></th>
                     <th class="day"><span class="dayname">Di</span><span class="daydate"></span></th>
                     <th class="day"><span class="dayname">Wo</span><span class="daydate"></span></th>

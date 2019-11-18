@@ -419,7 +419,29 @@ label {
 	padding: 4px 6px;
 }
 
-.day, .hour {
+.week-name {
+	text-align: center;
+	font-size: smaller;
+}
+
+.week-changer {
+	font-size: smaller;
+}
+
+.week-changer.prev {
+	text-align: left;
+}
+
+.week-changer.next {
+	text-align: right;
+}
+
+.week-changer a {
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.day, .hour, .week-name, .week-changer {
 	background: rgba(0,0,0,0.5);
 }
 
