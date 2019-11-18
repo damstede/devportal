@@ -28,9 +28,9 @@
             <thead>
                 <tr>
                     <th class="hour"></th>
-                    <td class="week-changer prev"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]-1)"><span class="awesome">&#xf053;</span><span> vorige</span><span class="extra-info"> week</span></a></td>
+                    <td class="week-changer prev"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]-1)"><span class="awesome">&#xf053;</span><span class="extra-extra-info"> vorige</span><span class="extra-info"> week</span></a></td>
                     <td class="week-name" colspan="3">bezig met laden...</td>
-                    <td class="week-changer next"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]+1)"><span>volgende </span><span class="extra-info">week </span><span class="awesome">&#xf054;</span></a></td>
+                    <td class="week-changer next"><a href="javascript:schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]+1)"><span class="extra-extra-info">volgende </span><span class="extra-info">week </span><span class="awesome">&#xf054;</span></a></td>
                 </tr>
                 <tr>
                     <th class="hour"></th>
@@ -326,7 +326,7 @@
                     <p>Weet je zeker dat je deze reservering wilt annuleren?</p>
                     <input type="hidden" id="cancel-id" name="id" value="" />
                     <div class="actionbuttons">
-                        <input class="button" type="button" value="Nee" data-action="reservationcancel" onclick="hideAction(this);" />
+                        <input class="button extra" type="button" value="Nee" data-action="reservationcancel" onclick="hideAction(this);" />
                         <input class="button" type="button" value="Ja" data-action="reservationcancel" onclick="hideAction(this); cancelSubmit();" />
                     </div>
                 </form>

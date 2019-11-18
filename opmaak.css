@@ -619,11 +619,16 @@ label {
 
 	.week-changer a {
 		display: inline-block;
+		min-width: 24px;
 		padding: 8px 4px;
 	}
 }
 
 @media screen and (max-width: 650px) {
+	.extra-extra-info {
+		display: none;
+	}
+
 	.actiontable th {
 		width: 80px;
 	}
