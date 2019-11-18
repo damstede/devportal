@@ -60,6 +60,7 @@ var schedule = {
                         document.getElementsByClassName("week-name")[0].innerHTML = "week " + dates[i][1];
                     }
                 }
+                dates.shift();
                 schedule["dates"] = dates;
                 var request = new XMLHttpRequest();
                 request.open('POST', 'import/dschedule.php?year='+year+'&week='+week);
