@@ -40,6 +40,10 @@ a.notoption {
 	margin: 0px 3px;
 }
 
+.awesome {
+	font-family: FontAwesome;
+}
+
 header {
 	display: block;
 	height: 56px;
@@ -78,10 +82,6 @@ header #pageoptions > * {
 	text-align: center;
 	transition: 0.15s;
 	text-shadow: 0px 0px 0px #FFFFFF;
-}
-
-header #pageoptions .awesome {
-	font-family: FontAwesome;
 }
 
 header #pageoptions > *:hover {
@@ -422,10 +422,12 @@ label {
 .week-name {
 	text-align: center;
 	font-size: smaller;
+	white-space: nowrap;
 }
 
 .week-changer {
 	font-size: smaller;
+	white-space: nowrap;
 }
 
 .week-changer.prev {
@@ -439,6 +441,10 @@ label {
 .week-changer a {
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.week-changer a * {
+	vertical-align: middle;
 }
 
 .day, .hour, .week-name, .week-changer {
@@ -455,6 +461,7 @@ label {
 
 .daydate {
 	display: block;
+	white-space: nowrap;
 }
 
 .hour {
@@ -573,7 +580,7 @@ label {
 }
 
 @media screen and (max-width: 850px) {
-	.location-prefix {
+	.extra-info {
 		display: none;
 	}
 }
@@ -581,5 +588,10 @@ label {
 @media screen and (max-width: 650px) {
 	.actiontable th {
 		width: 80px;
+	}
+
+	.week-changer a {
+		display: inline-block;
+		padding: 12px 4px;
 	}
 }

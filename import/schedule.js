@@ -49,12 +49,16 @@ var schedule = {
             dateReq.onload = function() {
                 schedule.clear();
                 schedule.currentlyLoaded = [year, week];
-                document.getElementsByClassName("week-name")[0].innerHTML = "week " + week;
                 var dayDates = document.getElementsByClassName("daydate");
                 var dates = dateReq.responseText.split(" ");
-                for (var i = 0; i < 5; i++) {
+                for (var i = 0; i < 6; i++) {
                     dates[i] = dates[i].split("-");
-                    dayDates[i].innerHTML = dates[i][2]+'-'+dates[i][1];
+                    if (i > 0) {
+                        dayDates[i-1].innerHTML = dates[i][2]+'-'+dates[i][1];
+                    }
+                    else {
+                        document.getElementsByClassName("week-name")[0].innerHTML = "week " + dates[i][1];
+                    }
                 }
                 schedule["dates"] = dates;
                 var request = new XMLHttpRequest();
@@ -122,7 +126,7 @@ var schedule = {
         if (res["cancelled"]) {
             resElem.className += " cancelled";
         }
-        var contents = '<b>Kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + '),<span class="location-prefix"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
+        var contents = '<b>Kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + '),<span class="extra-info"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
         if (res["teacher"] != null) {
             contents += ', namens:<br/><i>' + res["teacher"] + '</i>';
         }
