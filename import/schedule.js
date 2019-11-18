@@ -33,9 +33,7 @@ var schedule = {
     },
 
     reload: function() {
-        schedule.get(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]).then(function(reservations) {
-            schedule.load(reservations);
-        });
+        schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]);
     },
 
     get: function(year, week) {
@@ -88,6 +86,14 @@ var schedule = {
                 resolve([d.getFullYear(), parseInt(request.responseText), d.getDay()]);
             };
             request.send();
+        });
+    },
+
+    getAndLoad: function(year, week) {
+        return new Promise(function(resolve, reject) {
+            schedule.get(year, week).then(function(reservations) {
+                schedule.load(reservations);
+            });
         });
     },
 
