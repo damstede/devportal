@@ -483,6 +483,7 @@ label {
 }
 
 .reservation {
+	position: relative;
 	background: #DEDEDE;
 	border: solid 1px #9E9E9E;
 	border-radius: 2px;
@@ -491,6 +492,39 @@ label {
 	margin: 4px;
 	padding: 3px 6px;
 	min-height: 44px;
+}
+
+.reservation .reservation-cancel {
+	display: block;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+
+	cursor: not-allowed;
+	color: #1A1A1A !important;
+	text-decoration: none;
+	pointer-events: none;
+	opacity: 0;
+	transition: 0.15s;
+}
+
+.reservation.cancellable .reservation-cancel {
+	cursor: pointer;
+	color: #E31832 !important;
+}
+
+.reservation.cancellable .reservation-cancel:hover {
+	color: #EB4358 !important;
+}
+
+.reservation.cancellable:hover .reservation-cancel {
+	opacity: 1;
+	pointer-events: all;
+	transition: 0.05s;
 }
 
 .reservation.cancelled {
@@ -514,7 +548,6 @@ label {
 	padding: 0px 6px;
 	margin: 0px 4px;
 	opacity: 0;
-	transition: 0.15s;
 	pointer-events: none;
 }
 
@@ -583,6 +616,11 @@ label {
 	.extra-info {
 		display: none;
 	}
+
+	.week-changer a {
+		display: inline-block;
+		padding: 8px 4px;
+	}
 }
 
 @media screen and (max-width: 650px) {
@@ -593,5 +631,17 @@ label {
 	.week-changer a {
 		display: inline-block;
 		padding: 12px 4px;
+	}
+
+	.reservation .reservation-cancel {
+		width: 26px;
+		height: 26px;
+		line-height: 26px;
+		top: 4px;
+		right: 4px;
+		font-size: larger;
+		background: rgba(0,0,0,0.1);
+		border-radius: 4px;
+		opacity: 0.4;
 	}
 }

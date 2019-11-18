@@ -61,7 +61,7 @@
         }
 
         public function isReserved($cartId, $date, $hour) {
-            $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' LIMIT 1");
+            $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
             if ($result != false) {
                 if (mysqli_num_rows($result) > 0) {
                     return $this->formatReservation(mysqli_fetch_assoc($result));
@@ -95,6 +95,21 @@
             }
         }
 
+        public function cancelReservation($reservationId) {
+            $result = $this->runQuery("UPDATE damstede.cartreservations SET cancelled=1 WHERE id='".$this->makeSafe($reservationId)."' LIMIT 1");
+            if ($result != false) {
+                if (mysqli_affected_rows($this->connection) > 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
         private function formatReservation($res) {
             $res["id"] = intval($res["id"]);
             $res["cart_id"] = intval($res["cart_id"]);
@@ -117,6 +132,16 @@
                 array_push($reservations, $this->formatReservation($row));
             }
             return $reservations;
+        }
+
+        public function getCartReservation($reservationId) {
+            $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE id='".$this->makeSafe($reservationId)."' LIMIT 1");
+            if (mysqli_num_rows($result) > 0) {
+                return $this->formatReservation(mysqli_fetch_assoc($result));
+            }
+            else {
+                return false;
+            }
         }
     }
 ?>

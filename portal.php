@@ -151,37 +151,67 @@
     }
 
     function reservationSubmit() {
-            console.log("Reservation form submit");
-            document.getElementById('loading').style.display = 'table';
-            var form = document.getElementById('reservation-form');
-            var reservationError = document.getElementById("reservation-error-msg");
-            var data = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', form.getAttribute('action'), true);
-            xhr.onload = function() {
-                document.getElementById('loading').style.display = 'none';
-                if (xhr.status !== 200) {
-                    reservationError.innerHTML = "Serverfout "+xhr.statusText+". Probeer het later opnieuw.";
-                    showAction('reservationerror');
-                }
-                else {
-                    var loginResponse = JSON.parse(xhr.responseText);
-                    switch (loginResponse.type) {
-                        case "success": {
-                            schedule.reload();
-                            showAction('reservationsuccess');
-                            break;
-                        }
-                        default: {
-                            reservationError.innerHTML = loginResponse.message;
-                            showAction('reservationerror');
-                            break;
-                        }
+        console.log("Reservation form submit");
+        document.getElementById('loading').style.display = 'table';
+        var form = document.getElementById('reservation-form');
+        var reservationError = document.getElementById("reservation-error-msg");
+        var data = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', form.getAttribute('action'), true);
+        xhr.onload = function() {
+            document.getElementById('loading').style.display = 'none';
+            if (xhr.status !== 200) {
+                reservationError.innerHTML = xhr.statusText+". Probeer het later opnieuw.";
+                showAction('reservationerror');
+            }
+            else {
+                var loginResponse = JSON.parse(xhr.responseText);
+                switch (loginResponse.type) {
+                    case "success": {
+                        schedule.reload();
+                        showAction('reservationsuccess');
+                        break;
+                    }
+                    default: {
+                        reservationError.innerHTML = loginResponse.message;
+                        showAction('reservationerror');
+                        break;
                     }
                 }
-            };
-            xhr.send(data);
-        }
+            }
+        };
+        xhr.send(data);
+    }
+
+    function setUpReservationCanceller(reservationId) {
+        document.getElementById("cancel-id").value = reservationId;
+    }
+
+    function cancelSubmit() {
+        console.log("Cancel form submit");
+        document.getElementById('loading').style.display = 'table';
+        var form = document.getElementById('cancel-form');
+        var cancelMessage = document.getElementById("cancel-message");
+        var data = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', form.getAttribute('action'), true);
+        xhr.onload = function() {
+            document.getElementById('loading').style.display = 'none';
+            if (xhr.status !== 200) {
+                cancelMessage.innerHTML = xhr.statusText+". Probeer het later opnieuw.";
+                showAction('cancelmessage');
+            }
+            else {
+                var cancelResponse = JSON.parse(xhr.responseText);
+                cancelMessage.innerHTML = cancelResponse.message;
+                showAction('cancelmessage');
+                if (cancelResponse.type == "success") {
+                    schedule.reload();
+                }
+            }
+        };
+        xhr.send(data);
+    }
     </script>
 
     <div class="action" id="reservationadder" style="display: none;">
@@ -274,6 +304,36 @@
         </div>
     </div>
 
+    <div class="action" id="cancelmessage" style="display: none;">
+        <div class="inneraction">
+            <div class="actioncontent">
+                <div class="actionheader">Reservering annuleren</div>
+                <div class="actionclose" data-action="cancelmessage" onclick="hideAction(this);">&#x2716;</div>
+                <p id="cancel-message">Er is een onbekende fout opgetreden. Probeer het later opnieuw.</p>
+                <div class="actionbuttons">
+                    <input class="button" type="button" value="Oké" data-action="cancelmessage" onclick="hideAction(this);" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action" id="reservationcancel" style="display: none;">
+        <div class="inneraction">
+            <div class="actioncontent">
+                <form id="cancel-form" action="import/cancel-cb.php" method="get" target="_self" accept-charset="utf-8" autocomplete="off" onsubmit="">
+                    <div class="actionheader">Reservering annuleren</div>
+                    <div class="actionclose" data-action="reservationcancel" onclick="hideAction(this);">&#x2716;</div>
+                    <p>Weet je zeker dat je deze reservering wilt annuleren?</p>
+                    <input type="hidden" id="cancel-id" name="id" value="" />
+                    <div class="actionbuttons">
+                        <input class="button" type="button" value="Nee" data-action="reservationcancel" onclick="hideAction(this);" />
+                        <input class="button" type="button" value="Ja" data-action="reservationcancel" onclick="hideAction(this); cancelSubmit();" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="loading" style="display: table; width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; right: 0px; bottom: 0px; background-color: rgba(0,0,0,0.8);">
 		<div style="display: table-cell; vertical-align: middle;">
 			<div style="margin-left: auto; margin-right: auto; text-align: center;">
@@ -283,7 +343,7 @@
 	</div>
     
     <script>
-    schedule.init().then(function() {
+    schedule.init("<?PHP echo $_SESSION["user"]["code"]; ?>").then(function() {
         schedule.getCurrentWeekInfo().then(function(weekInfo) {
             schedule.get(weekInfo[0], weekInfo[1]).then(function(reservations) {
                 schedule.load(reservations);
