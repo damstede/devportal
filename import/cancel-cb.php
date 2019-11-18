@@ -55,7 +55,7 @@
         $reservation = $damstedeDB->getCartReservation($_POST["id"]);
         if ($reservation["user"] === $_SESSION["user"]["code"]) {
             if ($damstedeDB->cancelReservation($_POST["id"])) {
-                returnData("De reservering is geannuleerd.", $damstedeDB->makeSafe($_POST["id"]));
+                returnData("De reservering is geannuleerd.", null);
             }
             else {
                 returnError("Kon reservering niet annuleren. Probeer het later opnieuw.");
