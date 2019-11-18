@@ -93,6 +93,7 @@ var schedule = {
         return new Promise(function(resolve, reject) {
             schedule.get(year, week).then(function(reservations) {
                 schedule.load(reservations);
+                resolve();
             });
         });
     },
