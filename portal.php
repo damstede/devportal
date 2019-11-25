@@ -7,6 +7,7 @@
 
     require_once("import/db.php");
     $damstedeDB = new DamstedeDB();
+    $carts = $damstedeDB->getDeviceCarts();
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -256,7 +257,6 @@
                                 <select name="cart" id="cart" required>
                                     <option value="" selected disabled>Selecteer een kar...</option>
                                     <?PHP
-                                        $carts = $damstedeDB->getDeviceCarts();
                                         foreach ($carts as $cart) {
                                             ?>
                                             <option value="<?PHP echo $cart["id"]; ?>"<?PHP echo ($cart["available"]?"":" disabled"); ?>>Kar <?PHP echo $cart["id"]; ?> (<?PHP echo $cart["dev_type"]; ?>, <?PHP echo $cart["dev_amount"]; ?> stuks)</option>
@@ -324,7 +324,18 @@
             <div class="actioncontent">
                 <div class="actionheader">Informatie</div>
                 <div class="actionclose" data-action="basic-info" onclick="hideAction(this);">&#x2716;</div>
-                <p>Locaties apparaatkarren: <br/><i>nog niet bekend</i></p>
+                <p><b>Locaties apparaatkarren:</b></p>
+                <ul style="text-align: left; font-size: smaller;">
+                <?PHP
+                    foreach ($carts as $cart) {
+                        ?>
+                        <li>Kar <?PHP echo $cart["id"]; ?> (<?PHP echo $cart["dev_type"]; ?>,  <?PHP echo $cart["dev_amount"]; ?> stuks) staat in <?PHP echo $cart["default_location"]; ?> en kan momenteel <?PHP echo ($cart["available"] ? "wel" : "<b>niet</b>"); ?> worden gereserveerd.</li>
+                        <?PHP
+                    }
+                ?>
+                </ul>
+                <p style="margin-top: 32px;"><b>Mist er een app?</b></p>
+                <p style="font-size: smaller;">Is er een specifieke app nodig voor jouw les? Laat het Brane weten via een e-mail.</p>
                 <div class="actionbuttons">
                     <input class="button" type="button" value="Sluiten" data-action="basic-info" onclick="hideAction(this);" />
                 </div>
