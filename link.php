@@ -18,11 +18,10 @@
                         }
                         else {
                             document.getElementById("loading").style.display = "table";
-                            scanner.destroy();
-                            scanner = null;
-                            console.log("QR-scanner gestopt");
                             document.getElementById("loading").style.display = "none";
                             if (zResult["institution"] === "damstedelyceum") {
+                                scanner.stop();
+                                console.log("QR-scanner gestopt");
                                 document.getElementById('zermelo-code').value = zResult["code"];
                                 showAction('zermelolink');
                                 submitZermelo();
