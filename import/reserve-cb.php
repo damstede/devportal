@@ -51,7 +51,7 @@
             returnError("Datum is niet ingevuld. Vul een datum in.");
         }
         
-        if (strtotime($_POST["date"]) < strtotime(date("today"))) {
+        if (strtotime($_POST["date"]) < strtotime("today")) {
             returnError("Datum is in het verleden... Je kunt alleen voor vandaag of in de toekomst reserveren!");
         }
 
