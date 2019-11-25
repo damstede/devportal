@@ -138,6 +138,9 @@
         
         var action = document.getElementById(name);
         action.style.display = "table";
+        if (action.className.indexOf("important") > -1) {
+            action.className += " anim";
+        }
     }
     
     function hideAction(elem) {
@@ -145,6 +148,9 @@
         
         var action = document.getElementById(actionName);
         action.style.display = "none";
+        if (action.className.indexOf("important") > -1) {
+            action.className = action.className.replace("anim", "").trim();
+        }
     }
     </script>
     <script>
@@ -194,22 +200,25 @@
         console.log("Cancel form submit");
         document.getElementById('loading').style.display = 'table';
         var form = document.getElementById('cancel-form');
-        var cancelMessage = document.getElementById("cancel-message");
         var data = new FormData(form);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', form.getAttribute('action'), true);
         xhr.onload = function() {
             document.getElementById('loading').style.display = 'none';
             if (xhr.status !== 200) {
-                cancelMessage.innerHTML = xhr.statusText+". Probeer het later opnieuw.";
-                showAction('cancelmessage');
+                document.getElementById("cancel-error-message").innerHTML = xhr.statusText+". Probeer het later opnieuw.";
+                showAction('cancelerror');
             }
             else {
                 var cancelResponse = JSON.parse(xhr.responseText);
-                cancelMessage.innerHTML = cancelResponse.message;
-                showAction('cancelmessage');
                 if (cancelResponse.type == "success") {
                     schedule.reload();
+                    document.getElementById("cancel-message").innerHTML = cancelResponse.message;
+                    showAction('cancelmessage');
+                }
+                else {
+                    document.getElementById("cancel-error-message").innerHTML = cancelResponse.message;
+                    showAction('cancelerror');
                 }
             }
         };
@@ -280,7 +289,7 @@
 		</div>
     </div>
 
-    <div class="action" id="reservationerror" style="display: none;">
+    <div class="action important" id="reservationerror" style="display: none;">
         <div class="inneraction">
             <div class="actioncontent">
                 <div class="actionheader">Er ging iets fout</div>
@@ -306,12 +315,25 @@
         </div>
     </div>
 
+    <div class="action important" id="cancelerror" style="display: none;">
+        <div class="inneraction">
+            <div class="actioncontent">
+                <div class="actionheader">Kon reservering niet annuleren</div>
+                <div class="actionclose" data-action="cancelerror" onclick="hideAction(this);">&#x2716;</div>
+                <p id="cancel-error-message">Er is een onbekende fout opgetreden. Probeer het later opnieuw.</p>
+                <div class="actionbuttons">
+                    <input class="button" type="button" value="Oké" data-action="cancelerror" onclick="hideAction(this);" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="action" id="cancelmessage" style="display: none;">
         <div class="inneraction">
             <div class="actioncontent">
-                <div class="actionheader">Reservering annuleren</div>
+                <div class="actionheader">Reservering geannuleerd</div>
                 <div class="actionclose" data-action="cancelmessage" onclick="hideAction(this);">&#x2716;</div>
-                <p id="cancel-message">Er is een onbekende fout opgetreden. Probeer het later opnieuw.</p>
+                <p id="cancel-message">De reservering is geannuleerd.</p>
                 <div class="actionbuttons">
                     <input class="button" type="button" value="Oké" data-action="cancelmessage" onclick="hideAction(this);" />
                 </div>

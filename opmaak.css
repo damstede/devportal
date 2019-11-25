@@ -162,6 +162,56 @@ header #pageoptions > *:hover {
 	-webkit-border-radius: 100px;
 }
 
+.action.important.anim .actioncontent {
+	animation: importantaction 0.25s ease-in-out 0s 1; 
+}
+
+@keyframes importantaction {
+	0% {
+		margin-left: 0px;
+	}
+	20% {
+		margin-left: -24px;
+		transform: skew(4deg);
+	}
+	75% {
+		margin-left: 24px;
+		transform: skew(-2deg);
+	}
+	100% {
+		margin-left: 0px;
+	}
+}
+
+@-webkit-keyframes importantaction {
+	0% {
+		margin-left: 0px;
+	}
+	20% {
+		margin-left: -24px;
+	}
+	75% {
+		margin-left: 24px;
+	}
+	100% {
+		margin-left: 0px;
+	}
+}
+
+@-moz-keyframes importantaction {
+	0% {
+		margin-left: 0px;
+	}
+	20% {
+		margin-left: -24px;
+	}
+	75% {
+		margin-left: 24px;
+	}
+	100% {
+		margin-left: 0px;
+	}
+}
 
 .actionheader {
 	display: block;
