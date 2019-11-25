@@ -553,12 +553,13 @@ label {
 }
 
 .reservation.add-btn:hover {
-	background: rgba(255,255,255,0.3);
+	background: rgba(255,255,255,0.3) !important;
 	transition: 0.05s;
 }
 
 .lesson:hover .reservation.add-btn {
-	opacity: 1;
+	opacity: 1 !important;
+	background: rgba(255,255,255,0.1) !important;
 	height: initial;
 	padding: 12px 6px;
 	margin: 4px 4px;
@@ -653,23 +654,25 @@ label {
 
 	/* op mobiel is de + knop altijd zichtbaar ivm safari */
 	.reservation.add-btn {
-		opacity: 1;
+		opacity: 0.5;
 		height: initial;
 		padding: 12px 6px;
 		margin: 4px 4px;
 		transition: 0.05s;
 		pointer-events: initial;
+		background: rgba(255,255,255,0.02);
 	}
 }
 
 @supports (-webkit-overflow-scrolling: touch) {
 	/* op safari is de + knop altijd zichtbaar ivm bugs */
 	.reservation.add-btn {
-		opacity: 1;
+		opacity: 0.5;
 		height: initial;
 		padding: 12px 6px;
 		margin: 4px 4px;
 		transition: 0.05s;
 		pointer-events: initial;
+		background: rgba(255,255,255,0.02);
 	}
 }
