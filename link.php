@@ -180,9 +180,16 @@
                             </tr>
                             <tr>
                                 <th>Toegangscode</th>
-                                <td><input required type="number" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="XXX XXX XXX XXX" size="65" min="0" max="999999999999" value="" /></td>
+                                <td><input required type="text" id="zermelo-code" name="zermelo-code" autocomplete="off" placeholder="123 456 789 123" size="65" maxlength="15" value="" onpaste="spaceUpZermeloCode(event);" oninput="spaceUpZermeloCode(event);" onchange="spaceUpZermeloCode(event);" /></td>
                             </tr>
                         </table>
+                        <script>
+                        function spaceUpZermeloCode(event) {
+                            var i = event.target.value;
+                            i = i.replace(/[^0-9]/g, "").split(" ").join("").substr(0, 12).replace(/(.{3})/g, '$1 ').trim();
+                            event.target.value = i;
+                        }
+                        </script>
                         <div class="actionbuttons">
                             <input class="button extra" type="button" value="Annuleren" data-action="zermelolink" onclick="hideAction(this);" />
                             <input class="button" type="button" value="Inloggen" name="login" onclick="submitZermelo();"/>

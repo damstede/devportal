@@ -80,13 +80,14 @@
         if ($_POST["zermelo-school"] !== "damstedelyceum") {
             returnError("Alleen medewerkers van het Damstede Lyceum kunnen gebruik maken van dit portaal");
         }
+        $zermeloCode = str_replace(" ", "", $_POST["zermelo-code"]);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://".$_POST["zermelo-school"].".zportal.nl/api/v3/oauth/token");
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->secure);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('grant_type' => 'authorization_code', 'code' => $_POST["zermelo-code"])));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('grant_type' => 'authorization_code', 'code' => $zermeloCode)));
         $result = curl_exec($ch);
         curl_close($ch);
         if (!empty($result)) {
