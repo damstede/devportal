@@ -351,7 +351,7 @@
                 <?PHP
                     foreach ($carts as $cart) {
                         ?>
-                        <li>Kar <?PHP echo $cart["id"]; ?> (<?PHP echo $cart["dev_type"]; ?>,  <?PHP echo $cart["dev_amount"]; ?> stuks) staat in <?PHP echo $cart["default_location"]; ?> en kan momenteel <?PHP echo ($cart["available"] ? "wel" : "<b>niet</b>"); ?> worden gereserveerd.</li>
+                        <li>Kar <?PHP echo $cart["id"]; ?> (<?PHP echo $cart["dev_type"]; ?>,  <?PHP echo $cart["dev_amount"]; ?> stuks) staat in <?PHP echo $cart["default_location"]; ?> en kan momenteel <?PHP echo ($cart["available"] ? "" : "<b>niet</b>"); ?> worden gereserveerd.</li>
                         <?PHP
                     }
                 ?>
