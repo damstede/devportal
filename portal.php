@@ -226,7 +226,7 @@
 						<tr>
 							<th>Datum</th>
 							<td>
-								<input type="date" name="date" id="date" min="<?PHP echo date("Y-m-d"); ?>" required />
+								<input type="date" name="date" id="date" min="<?PHP echo date("Y-m-d"); ?>" placeholder="YYYY-MM-DD" required />
 							</td>
                         </tr>
                         <tr>
