@@ -661,3 +661,15 @@ label {
 		pointer-events: initial;
 	}
 }
+
+@supports (-webkit-overflow-scrolling: touch) {
+	/* op safari is de + knop altijd zichtbaar ivm bugs */
+	.reservation.add-btn {
+		opacity: 1;
+		height: initial;
+		padding: 12px 6px;
+		margin: 4px 4px;
+		transition: 0.05s;
+		pointer-events: initial;
+	}
+}
