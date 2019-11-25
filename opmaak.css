@@ -20,6 +20,7 @@ body {
 	width: 100%;
 	max-width: 900px;
 	min-height: 100%;
+	min-width: 400px;
 	margin: 0 auto;
 	box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
 }
@@ -648,5 +649,15 @@ label {
 		background: rgba(0,0,0,0.1);
 		border-radius: 4px;
 		opacity: 0.4;
+	}
+
+	/* op mobiel is de + knop altijd zichtbaar ivm safari */
+	.reservation.add-btn {
+		opacity: 1;
+		height: initial;
+		padding: 12px 6px;
+		margin: 4px 4px;
+		transition: 0.05s;
+		pointer-events: initial;
 	}
 }
