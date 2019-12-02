@@ -127,17 +127,17 @@ var schedule = {
         resElem.className = "reservation";
         if (res["cancelled"]) {
             resElem.className += " cancelled";
-            resElem.setAttribute("title", 'Geannuleerde reservering voor kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + ') op ' + new Date(Date.parse(res["date"])).toLocaleDateString() + ', het ' + res["hour"] + 'e uur');
+            resElem.setAttribute("title", 'Geannuleerde reservering voor ' + schedule.carts[res["cart_id"]]["name"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + ') op ' + new Date(Date.parse(res["date"])).toLocaleDateString() + ', het ' + res["hour"] + 'e uur');
         }
         else {
-            resElem.setAttribute("title", 'Reservering voor kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + ') op ' + new Date(Date.parse(res["date"])).toLocaleDateString() + ', het ' + res["hour"] + 'e uur');
+            resElem.setAttribute("title", 'Reservering voor ' + schedule.carts[res["cart_id"]]["name"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + ') op ' + new Date(Date.parse(res["date"])).toLocaleDateString() + ', het ' + res["hour"] + 'e uur');
         }
         var contents = '';
         if (res["user"] === schedule["user"] && !res["cancelled"]) {
             resElem.className += " cancellable";
             contents += '<a class="reservation-cancel" title="Reservering annuleren" href="javascript:void(0)" onclick="setUpReservationCanceller('+res["id"]+'); showAction(\'reservationcancel\');">&#x2716;</a>';
         }
-        contents += '<b>Kar ' + res["cart_id"] + ' (' + schedule.carts[res["cart_id"]]["dev_type"] + '),<span class="extra-info"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
+        contents += '<b>' + schedule.carts[res["cart_id"]]["name"] + ',<span class="extra-info"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
         if (res["teacher"] != null) {
             contents += ', namens:<br/><i>' + res["teacher"] + '</i>';
         }
