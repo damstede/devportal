@@ -20,7 +20,7 @@
     <header>
         <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span></h1>
         <div id="pageoptions">
-            <div class="extra-extra-info" id="addreservation" title="Kar reserveren" onclick="showAction('reservationadder'); setUpReservationAdder('','', '');">+</div>
+            <div class="extra-extra-info" id="addreservation" title="Nieuwe reservering aanmaken" onclick="showAction('reservationadder'); setUpReservationAdder('','', '', 32);">+</div>
             <div class="awesome" id="info" title="Informatie" onclick="showAction('basic-info');">&#xf05a;</div>
             <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
             <div class="awesome" id="signout" title="Uitloggen (ingelogd als <?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>)" onclick="window.location.href='unlink.php';">&#xf08b;</div>
@@ -47,27 +47,27 @@
             <tbody>
                 <tr id="week-hour-1">
                     <th class="hour">1.</th>
-                    <td class="lesson" data-lesson="1-1" data-location=""></td>
-                    <td class="lesson" data-lesson="2-1" data-location=""></td>
-                    <td class="lesson" data-lesson="3-1" data-location=""></td>
-                    <td class="lesson" data-lesson="4-1" data-location=""></td>
-                    <td class="lesson" data-lesson="5-1" data-location=""></td>
+                    <td class="lesson" data-lesson="1-1" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-1" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-1" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-1" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-1" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-2">
                     <th class="hour">2.</th>
-                    <td class="lesson" data-lesson="1-2" data-location=""></td>
-                    <td class="lesson" data-lesson="2-2" data-location=""></td>
-                    <td class="lesson" data-lesson="3-2" data-location=""></td>
-                    <td class="lesson" data-lesson="4-2" data-location=""></td>
-                    <td class="lesson" data-lesson="5-2" data-location=""></td>
+                    <td class="lesson" data-lesson="1-2" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-2" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-2" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-2" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-2" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-3">
                     <th class="hour">3.</th>
-                    <td class="lesson" data-lesson="1-3" data-location=""></td>
-                    <td class="lesson" data-lesson="2-3" data-location=""></td>
-                    <td class="lesson" data-lesson="3-3" data-location=""></td>
-                    <td class="lesson" data-lesson="4-3" data-location=""></td>
-                    <td class="lesson" data-lesson="5-3" data-location=""></td>
+                    <td class="lesson" data-lesson="1-3" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-3" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-3" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-3" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-3" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr>
                     <th class="hour break"></th>
@@ -75,19 +75,19 @@
                 </tr>
                 <tr id="week-hour-4">
                     <th class="hour">4.</th>
-                    <td class="lesson" data-lesson="1-4" data-location=""></td>
-                    <td class="lesson" data-lesson="2-4" data-location=""></td>
-                    <td class="lesson" data-lesson="3-4" data-location=""></td>
-                    <td class="lesson" data-lesson="4-4" data-location=""></td>
-                    <td class="lesson" data-lesson="5-4" data-location=""></td>
+                    <td class="lesson" data-lesson="1-4" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-4" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-4" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-4" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-4" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-5">
                     <th class="hour">5.</th>
-                    <td class="lesson" data-lesson="1-5" data-location=""></td>
-                    <td class="lesson" data-lesson="2-5" data-location=""></td>
-                    <td class="lesson" data-lesson="3-5" data-location=""></td>
-                    <td class="lesson" data-lesson="4-5" data-location=""></td>
-                    <td class="lesson" data-lesson="5-5" data-location=""></td>
+                    <td class="lesson" data-lesson="1-5" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-5" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-5" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-5" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-5" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr>
                     <th class="hour break"></th>
@@ -95,35 +95,35 @@
                 </tr>
                 <tr id="week-hour-6">
                     <th class="hour">6.</th>
-                    <td class="lesson" data-lesson="1-6" data-location=""></td>
-                    <td class="lesson" data-lesson="2-6" data-location=""></td>
-                    <td class="lesson" data-lesson="3-6" data-location=""></td>
-                    <td class="lesson" data-lesson="4-6" data-location=""></td>
-                    <td class="lesson" data-lesson="5-6" data-location=""></td>
+                    <td class="lesson" data-lesson="1-6" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-6" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-6" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-6" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-6" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-7">
                     <th class="hour">7.</th>
-                    <td class="lesson" data-lesson="1-7" data-location=""></td>
-                    <td class="lesson" data-lesson="2-7" data-location=""></td>
-                    <td class="lesson" data-lesson="3-7" data-location=""></td>
-                    <td class="lesson" data-lesson="4-7" data-location=""></td>
-                    <td class="lesson" data-lesson="5-7" data-location=""></td>
+                    <td class="lesson" data-lesson="1-7" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-7" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-7" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-7" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-7" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-8">
                     <th class="hour">8.</th>
-                    <td class="lesson" data-lesson="1-8" data-location=""></td>
-                    <td class="lesson" data-lesson="2-8" data-location=""></td>
-                    <td class="lesson" data-lesson="3-8" data-location=""></td>
-                    <td class="lesson" data-lesson="4-8" data-location=""></td>
-                    <td class="lesson" data-lesson="5-8" data-location=""></td>
+                    <td class="lesson" data-lesson="1-8" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-8" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-8" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-8" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-8" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
                 <tr id="week-hour-9">
                     <th class="hour">9.</th>
-                    <td class="lesson" data-lesson="1-9" data-location=""></td>
-                    <td class="lesson" data-lesson="2-9" data-location=""></td>
-                    <td class="lesson" data-lesson="3-9" data-location=""></td>
-                    <td class="lesson" data-lesson="4-9" data-location=""></td>
-                    <td class="lesson" data-lesson="5-9" data-location=""></td>
+                    <td class="lesson" data-lesson="1-9" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="2-9" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="3-9" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="4-9" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
+                    <td class="lesson" data-lesson="5-9" data-location="" data-students="<?PHP echo $defaultClassSize; ?>"></td>
                 </tr>
             </tbody>
         </table>
@@ -154,10 +154,12 @@
     }
     </script>
     <script>
-    function setUpReservationAdder(lessonDate, lessonHour, lessonLocation) {
+    function setUpReservationAdder(lessonDate, lessonHour, lessonLocation, preferredAmount) {
         document.getElementById("date").value = lessonDate;
         document.getElementById("hour").value = lessonHour;
         document.getElementById("location").value = lessonLocation;
+        document.getElementById("amount").value = preferredAmount;
+        document.getElementById("amount").setAttribute("data-value-preferred", preferredAmount);
     }
 
     function reservationSubmit() {
@@ -175,15 +177,17 @@
                 showAction('reservationerror');
             }
             else {
-                var loginResponse = JSON.parse(xhr.responseText);
-                switch (loginResponse.type) {
+                var res = JSON.parse(xhr.responseText);
+                console.log(res);
+                switch (res.type) {
                     case "success": {
                         schedule.reload();
+                        document.getElementById("reservation-success").innerHTML = res.message;
                         showAction('reservationsuccess');
                         break;
                     }
                     default: {
-                        reservationError.innerHTML = loginResponse.message;
+                        reservationError.innerHTML = res.message;
                         showAction('reservationerror');
                         break;
                     }
@@ -231,7 +235,7 @@
 		<div class="inneraction">
 			<div class="actioncontent">
 				<form id="reservation-form" action="import/reserve-cb.php" method="post" target="_self" enctype="multipart/form-data" accept-charset="utf-8" autocomplete="off" onsubmit="">
-					<div class="actionheader">Kar reserveren</div>
+					<div class="actionheader">Reserveren</div>
 					<div class="actionclose" data-action="reservationadder" onclick="hideAction(this);">&#x2716;</div>
 					<table class="actiontable">
 						<tr>
@@ -262,10 +266,10 @@
 							<td><input type="text" id="location" name="location" autocomplete="off" placeholder="Voor welk lokaal reserveer je?" size="65" maxlength="6" /></td>
 						</tr>
                         <tr>
-                            <th>Kar</th>
+                            <th>Kar/lokaal</th>
                             <td>
                                 <select name="cart" id="cart" required>
-                                    <option value="" selected disabled>Selecteer een kar...</option>
+                                    <option value="" selected disabled>Selecteer wat je wilt reserveren...</option>
                                     <?PHP
                                         foreach ($carts as $cart) {
                                             ?>
@@ -274,7 +278,36 @@
                                         }
                                     ?>
                                 </select>
+                                <script>
+                                    document.getElementById("cart").addEventListener("change", function(event) {
+                                        var amount = document.getElementById("amount");
+                                        var maxAmount = 1;
+                                        switch (event.target.value) {
+                                            <?PHP
+                                                foreach ($carts as $cart) {
+                                                    ?>
+                                                    case "<?PHP echo $cart["id"]; ?>":
+                                                        maxAmount = <?PHP echo $cart["dev_amount"]; ?>;
+                                                        break;
+                                                    <?PHP
+                                                }
+                                            ?>
+                                        }
+                                        amount.setAttribute("max", maxAmount);
+                                        var valuePreferred = parseInt(amount.getAttribute("data-value-preferred"));
+                                        if (maxAmount < valuePreferred) {
+                                            amount.value = maxAmount;
+                                        }
+                                        else {
+                                            amount.value = valuePreferred;
+                                        }
+                                    });
+                                </script>
                             </td>
+                        </tr>
+                        <tr>
+                            <th>Aantal<span class="extra-info"> apparaten</span></th>
+                            <td><input type="number" name="amount" id="amount" min="1" step="1" max="32" value="32" data-value-preferred="32" placeholder="Het aantal te reserveren apparaten" required /></td>
                         </tr>
 						<tr>
 							<th>Namens</th>
@@ -288,6 +321,19 @@
 				</form>
 			</div>
 		</div>
+    </div>
+
+    <div class="action important" id="loadingerror" style="display: none;">
+        <div class="inneraction">
+            <div class="actioncontent">
+                <div class="actionheader">Er ging iets fout</div>
+                <div class="actionclose" data-action="loadingerror" onclick="hideAction(this);">&#x2716;</div>
+                <p>Kon het rooster voor de gekozen week niet ophalen. Probeer het later opnieuw.</p>
+                <div class="actionbuttons">
+                    <input class="button" type="button" value="Oké" data-action="loadingerror" onclick="hideAction(this);" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="action important" id="reservationerror" style="display: none;">
@@ -347,18 +393,35 @@
             <div class="actioncontent">
                 <div class="actionheader">Informatie</div>
                 <div class="actionclose" data-action="basic-info" onclick="hideAction(this);">&#x2716;</div>
-                <p><b>Locaties apparaatkarren:</b></p>
-                <ul style="text-align: left; font-size: smaller;">
-                <?PHP
-                    foreach ($carts as $cart) {
-                        ?>
-                        <li><?PHP echo $cart["name"]; ?> (<?PHP echo $cart["dev_type"]; ?>, <?PHP echo $cart["dev_amount"]; ?> stuks) staat in <?PHP echo $cart["default_location"]; ?> en kan momenteel <?PHP echo ($cart["available"] ? "" : "<b>niet</b>"); ?> worden gereserveerd.</li>
+                <p><b>Status en locaties:</b></p>
+                <table class="action-table">
+                    <thead>
+                        <tr>
+                            <th>Kar/lokaal</th>
+                            <th>Type</th>
+                            <th>Aantal</th>
+                            <th>Beschikbaar</th>
+                            <th>Locatie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?PHP
-                    }
-                ?>
-                </ul>
-                <p style="margin-top: 32px;"><b>Mist er een app?</b></p>
-                <p style="font-size: smaller;">Is er een specifieke app nodig voor jouw les? Laat het Brane weten via een e-mail.</p>
+                        foreach ($carts as $cart) {
+                            ?>
+                                <tr>
+                                    <td><?PHP echo $cart["name"]; ?></td>
+                                    <td><?PHP echo $cart["dev_type"]; ?></td>
+                                    <td><?PHP echo $cart["dev_amount"]; ?></td>
+                                    <td><?PHP echo ($cart["available"] ? "ja" : "nee"); ?></td>
+                                    <td><?PHP echo $cart["default_location"]; ?></td>
+                                </tr>
+                            <?PHP
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <p style="margin-top: 32px;"><b>Mist er een app op een apparaat?</b></p>
+                <p style="font-size: smaller;">Is er een specifieke app nodig voor jouw les? Laat het <?PHP echo $contactName; ?> weten per e-mail:<br><a href="mailto:<?PHP echo $contactEmail; ?>" target="_blank"><?PHP echo $contactEmail; ?></a></p>
                 <div class="actionbuttons">
                     <input class="button" type="button" value="Sluiten" data-action="basic-info" onclick="hideAction(this);" />
                 </div>
@@ -394,7 +457,9 @@
     <script>
     schedule.init("<?PHP echo $_SESSION["user"]["code"]; ?>").then(function() {
         schedule.getCurrentWeekInfo().then(function(weekInfo) {
-            schedule.getAndLoad(weekInfo[0], weekInfo[1]);
+            schedule.getAndLoad(weekInfo[0], weekInfo[1]).catch(function(error) {
+                showAction('loadingerror');
+            });
         });
     });
     </script>

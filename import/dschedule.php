@@ -51,7 +51,7 @@
             returnData("Reserveringen gevonden", $damstedeDB->getCartReservations(intval($_GET["cart"]), intval($_GET["year"]), intval($_GET["week"])));
         }
         else {
-            returnError("Missende data: GET year en GET week moeten worden aangegeven. GET cart is niet verplicht, maar kan wel handig zijn om enkel voor een bepaalde kar reserveringen op te vragen.");
+            returnError("Missende data: GET year en GET week moeten worden aangegeven. GET cart is niet verplicht, maar kan wel handig zijn om enkel voor een bepaalde kar of lokaal reserveringen op te vragen.");
         }
     }
 ?>

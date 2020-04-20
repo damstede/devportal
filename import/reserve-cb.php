@@ -1,4 +1,6 @@
 <?PHP
+    // error_reporting(1); ini_set('display_errors', 1);
+
     header('Content-Type: text/html; charset=utf-8');
 	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 	header("Cache-Control: post-check=0, pre-check=0", false);
@@ -64,29 +66,75 @@
         }
 
         if (!isset($_POST["location"]) || empty($_POST["location"])) {
-            returnError("Geen lokaal ingevuld. Vul het lokaal in waar de kar zal worden gebruikt.");
+            returnError("Geen lokaal ingevuld. Vul het lokaal in waar de kar zal worden gebruikt of waar de les oorspronkelijk plaats vond.");
         }
 
         if (!isset($_POST["cart"]) || empty($_POST["cart"])) {
-            returnError("Geen apparaatkar geselecteerd. Kies een kar om te reserveren uit het dropdown-menu.");
+            returnError("Geen apparaatkar of lokaal geselecteerd. Kies een kar of lokaal om te reserveren uit het dropdown-menu.");
+        }
+
+        if (!isset($_POST["amount"]) || empty($_POST["amount"])) {
+            returnError("Geef het aantal te reserveren apparaten op onder 'aantal'.");
         }
 
         require_once("db.php");
+        require_once("nogit.php");
         $damstedeDB = new DamstedeDB();
         
-        if (empty($damstedeDB->getDeviceCart($_POST["cart"]))) {
-            returnError("Apparaatkar ".intval($_POST["cart"])." bestaat niet.");
+        $cart = $damstedeDB->getDeviceCart($_POST["cart"]);
+        if (empty($cart)) {
+            returnError("Apparaatkar of lokaal ".intval($_POST["cart"])." bestaat niet.");
         }
 
-        if ($damstedeDB->isReserved($_POST["cart"], $_POST["date"], $_POST["hour"])) {
-            returnError("Deze kar is al gereserveerd voor dit uur. Probeer een andere kar uit het dropdown-menu.");
+        if (!$cart["amount_choosable"]) {
+            if ($damstedeDB->isReserved($_POST["cart"], $_POST["date"], $_POST["hour"], $_POST["amount"])) {
+                returnError("Deze kar of dit lokaal is al gereserveerd voor dit uur. Probeer een ander uit het dropdown-menu.");
+            }
+        }
+        else {
+            $devicesLeft = $damstedeDB->getAmountOfDevicesLeft($_POST["cart"], $_POST["date"], $_POST["hour"]);
+            if ($devicesLeft < intval($_POST["amount"])) {
+                returnError("Er zijn in dit uur nog maar ".$devicesLeft." apparaten over in dit lokaal (je wilde er ".intval($_POST["amount"])." reserveren). Reserveer minder apparaten, of kies een ander lokaal uit het dropdown-menu.");
+            }
         }
 
         // ERROR HANDLING END
 
-        $reserved = $damstedeDB->reserveCart($_POST["cart"], $_POST["date"], $_POST["hour"], $_POST["location"], $_SESSION["user"]["code"], $_POST["teacher"]);
+        $reserved = $damstedeDB->reserveCart($_POST["cart"], $_POST["date"], $_POST["hour"], $_POST["location"], $_SESSION["user"]["code"], $_POST["teacher"], $_POST["amount"]);
         if ($reserved != false) {
-            returnData("Reservering geplaatst", null);
+            if ($cart["cart_type"] == 2) {
+                $phpMailerLoaded = include("phpmailer/PHPMailerAutoload.php");
+                if (!$phpMailerLoaded) {
+                    returnData("Je reservering is geplaatst, maar ".$zermeloManagerName." <b>kon niet op de hoogte worden gebracht van de lokaalwijziging</b>. E-mail zelf om de wijziging in het rooster door te voeren: <a href='mailto:".$zermeloManagerEmail."' target='_blank'>".$zermeloManagerEmail."</a>", null);
+                }
+                else {
+                    setlocale(LC_ALL, 'nl_NL');
+                    $mail = new PHPMailer();
+                    $mail->isSMTP();
+                    $mail->Host = $smtpHost;
+                    $mail->Port = $smtpPort;
+                    $mail->SMTPSecure = $smtpSecure;
+                    $mail->SMTPAuth = true;
+                    $mail->Username = $smtpUsername;
+                    $mail->Password = $smtpPassword;
+                    $mail->setFrom($smtpUsername, $smtpName);
+                    $mail->addReplyTo($contactEmail, $contactName);
+                    $mail->addAddress($zermeloManagerEmail, $zermeloManagerName);
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Nieuwe reservering van '.$_SESSION["user"]["code"].' voor '.$cart["name"].' op '.$_POST["date"].', het '.$_POST["hour"].'e uur';
+                    $mail->Body = 'Dag '.$zermeloManagerName.',<br><br><b>'.$_SESSION["user"]["code"].'</b> heeft een reservering geplaatst via het <a href="'.$portalUrl.'">Device Portal</a> voor <b>'.$cart["name"].'</b>, op <b>'.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur</b>. Kun jij deze lokaalwijziging doorvoeren in Zermelo?<br><br><br><small>Dit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar <a href="mailto:'.$contactEmail.'">'.$contactEmail.'</a>.</small>';
+                    $mail->AltBody = 'Dag '.$zermeloManagerName.',\n\n'.$_SESSION["user"]["code"].' heeft een reservering geplaatst via het Device Portal voor '.$cart["name"].', op '.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur. Kun jij deze lokaalwijziging doorvoeren in Zermelo?\n\n\n\nDit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar '.$contactEmail.'.';
+                    if (!$mail->send()) {
+                        returnData("Je reservering is geplaatst, maar ".$zermeloManagerName." <b>kon niet op de hoogte worden gebracht van de lokaalwijziging</b>. E-mail zelf om de wijziging in het rooster door te voeren: <a href='mailto:".$zermeloManagerEmail."' target='_blank'>".$zermeloManagerEmail."</a>", null);
+                    }
+                    else {
+                        returnData("Je reservering is geplaatst en ".$zermeloManagerName." is op de hoogte gebracht van de lokaalwijziging. Deze zal zo spoedig mogelijk worden doorgevoerd in het rooster op Zermelo.", null);
+                    }
+                }
+            }
+            else {
+                returnData("Je reservering is geplaatst!", null);
+            }
         }
         else {
             returnError("Kon geen reservering plaatsen. Probeer het later opnieuw.");

@@ -55,29 +55,65 @@
                     $cart["id"] = intval($cart["id"]);
                     $cart["dev_amount"] = intval($cart["dev_amount"]);
                     $cart["available"] = (intval($cart["available"]) > 0);
+                    $cart["amount_choosable"] = (intval($cart["amount_choosable"]) > 0);
+                    $cart["cart_type"] = intval($cart["cart_type"]);
                 }
             }
             return $cart;
         }
 
-        public function isReserved($cartId, $date, $hour) {
-            $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
-            if ($result != false) {
-                if (mysqli_num_rows($result) > 0) {
-                    return $this->formatReservation(mysqli_fetch_assoc($result));
+        public function isReserved($cartId, $date, $hour, $amount) {
+            $cart = $this->getDeviceCart($cartId);
+            if (!$cart["amount_choosable"]) {
+                $result = $this->runQuery("SELECT amount FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
+                if ($result != false) {
+                    if (mysqli_num_rows($result) > 0) {
+                        $reservedAmount = mysqli_fetch_assoc($result)["amount"];
+                        if ($reservedAmount < 1) {
+                            $reservedAmount = $cart["dev_amount"];
+                        }
+                        return $reservedAmount;
+                    }
+                    else {
+                        return false;
+                    }
                 }
                 else {
                     return false;
                 }
             }
             else {
-                return false;
+                $result = $this->runQuery("SELECT SUM(amount) AS reserved_amount FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
+                if ($result != false) {
+                    $reservedAmount = mysqli_fetch_assoc($result)["reserved_amount"];
+                    if ($reservedAmount >= $cart["dev_amount"]) {
+                        return $cart["dev_amount"];
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
             }
         }
 
-        public function reserveCart($cartId, $date, $hour, $location, $user, $teacher) {
-            if ($this->isReserved($cartId, $date, $hour) == false) {
-                $result = $this->runQuery("INSERT INTO damstede.cartreservations (cart_id, date, hour, location, user, teacher) VALUES ('".intval($cartId)."', '".date("Y-m-d", strtotime($date))."', '".intval($hour)."', '".$this->makeSafe($location)."', '".$this->makeSafe($user)."', '".$this->makeSafe($teacher)."')");
+        public function getAmountOfDevicesLeft($cartId, $date, $hour) {
+            $cart = $this->getDeviceCart($cartId);
+            $result = $this->runQuery("SELECT SUM(amount) AS reserved_amount FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
+            if ($result != false) {
+                $reservedAmount = mysqli_fetch_assoc($result)["reserved_amount"];
+                return $cart["dev_amount"] - $reservedAmount;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        public function reserveCart($cartId, $date, $hour, $location, $user, $teacher, $amount) {
+            if ($this->getAmountOfDevicesLeft($cartId, $date, $hour) >= $amount) {
+                $result = $this->runQuery("INSERT INTO damstede.cartreservations (cart_id, date, hour, location, user, teacher, amount) VALUES ('".intval($cartId)."', '".date("Y-m-d", strtotime($date))."', '".intval($hour)."', '".$this->makeSafe($location)."', '".$this->makeSafe($user)."', '".$this->makeSafe($teacher)."', '".intval($amount)."')");
                 if ($result != false) {
                     if (mysqli_affected_rows($this->connection) > 0) {
                         return true;
@@ -113,9 +149,11 @@
         private function formatReservation($res) {
             $res["id"] = intval($res["id"]);
             $res["cart_id"] = intval($res["cart_id"]);
+            $res["cart_type"] = $this->getDeviceCart($res["cart_id"])["cart_type"];
             $res["registered_on"] = strtotime($res["registered_on"]);
             $res["day"] = intval(date("w", strtotime($res["date"]))) - 1;
             $res["hour"] = intval($res["hour"]);
+            $res["amount"] = intval($res["amount"]);
             $res["cancelled"] = (intval($res["cancelled"]) > 0);
             return $res;
         }

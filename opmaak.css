@@ -166,6 +166,21 @@ header #pageoptions > *:hover {
 	animation: importantaction 0.25s ease-in-out 0s 1; 
 }
 
+.action-table {
+	display: inline-block;
+	overflow-x: auto;
+	white-space: nowrap;
+	max-width: 100%;
+	font-size: smaller;
+	text-align: left;
+	border-collapse: collapse;
+}
+
+.action-table td, .action-table th {
+	border: solid 1px #9E9E9E;
+	padding: 2px 16px 2px 4px;
+}
+
 @keyframes importantaction {
 	0% {
 		margin-left: 0px;

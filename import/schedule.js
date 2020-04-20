@@ -47,7 +47,9 @@ var schedule = {
     },
 
     reload: function() {
-        schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]);
+        schedule.getAndLoad(schedule.currentlyLoaded[0], schedule.currentlyLoaded[1]).catch(function(error) {
+            showAction('loadingerror');
+        });
     },
 
     get: function(year, week) {
@@ -133,6 +135,9 @@ var schedule = {
             schedule.get(year, week).then(function(results) {
                 schedule.load(results[0], results[1]);
                 resolve();
+            })
+            .catch(function(reason) {
+                reject(reason);
             });
         });
     },
@@ -149,6 +154,7 @@ var schedule = {
         for (var i = 0; i < lessonsCount; i++) {
             if (zermeloSchedule[i]["startTimeSlot"] != null) {
                 document.getElementById("week-hour-"+zermeloSchedule[i]["startTimeSlot"]).children[zermeloSchedule[i]["day"]+1].setAttribute("data-location", zermeloSchedule[i]["locations"][0]);
+                document.getElementById("week-hour-"+zermeloSchedule[i]["startTimeSlot"]).children[zermeloSchedule[i]["day"]+1].setAttribute("data-students", zermeloSchedule[i]["students"]);
             }
         }
         schedule.fillInResAddBtns();
@@ -170,7 +176,7 @@ var schedule = {
             resElem.className += " cancellable";
             contents += '<a class="reservation-cancel" title="Reservering annuleren" href="javascript:void(0)" onclick="setUpReservationCanceller('+res["id"]+'); showAction(\'reservationcancel\');">&#x2716;</a>';
         }
-        contents += '<b>' + schedule.carts[res["cart_id"]]["name"] + ',<span class="extra-info"> lokaal</span> '+res["location"]+'</b><br/>' + res["user"];
+        contents += '<b>' + schedule.carts[res["cart_id"]]["name"] + (res["cart_type"] == 1 ? ',<span class="extra-info"> lokaal</span> '+res["location"] : ', '+res["amount"]+' plaatsen') + '</b><br/>' + res["user"];
         if (res["teacher"] != null) {
             contents += ', namens:<br/><i>' + res["teacher"] + '</i>';
         }
@@ -182,7 +188,7 @@ var schedule = {
         var resAddBtn = document.createElement("div");
         resAddBtn.className = "reservation add-btn";
         resAddBtn.innerHTML = "+";
-        resAddBtn.setAttribute("title", "Kar reserveren");
+        resAddBtn.setAttribute("title", "Nieuwe reservering aanmaken");
         resAddBtn.setAttribute("onclick", "showAction('reservationadder');");
 
         var lessons = document.getElementsByClassName("lesson");
@@ -192,8 +198,9 @@ var schedule = {
                 var lessonDay = parseInt(lessons[i].getAttribute("data-lesson").split("-")[0]);
                 var lessonHour = parseInt(lessons[i].getAttribute("data-lesson").split("-")[1]);
                 var lessonLocation = lessons[i].getAttribute("data-location");
+                var lessonStudents = lessons[i].getAttribute("data-students");
                 var clonedBtn = resAddBtn.cloneNode(true);
-                clonedBtn.setAttribute("onclick", "showAction('reservationadder'); setUpReservationAdder('"+schedule.dates[lessonDay-1].join("-")+"', "+lessonHour+", '"+lessonLocation+"');");
+                clonedBtn.setAttribute("onclick", "showAction('reservationadder'); setUpReservationAdder('"+schedule.dates[lessonDay-1].join("-")+"', "+lessonHour+", '"+lessonLocation+"', "+lessonStudents+");");
                 lessons[i].appendChild(clonedBtn);
             }
         }

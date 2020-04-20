@@ -75,7 +75,7 @@
         </div>
     </header>
     <div id="content" class="extrapadding">
-        <p><b>Om gebruik te kunnen maken van het Device Portaal en een iPad-kar voor je les te reserveren, moet je inloggen via Zermelo:</b></p>
+        <p><b>Om gebruik te kunnen maken van het Device Portaal en een iPad-kar of computerlokaal voor je les te reserveren, moet je inloggen via Zermelo:</b></p>
         <ol>
             <li>Open het <a href="https://damstedelyceum.zportal.nl/main/#connectionsModule-connectApp" target="_blank">Zermelo Portal</a> en log in</li>
             <li>Ga naar menu Koppelingen</li>

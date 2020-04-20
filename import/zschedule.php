@@ -54,7 +54,7 @@
 			
 			$ch = curl_init();
 			// user=~me voor eigen rooster
-			$url = "https://".$_SESSION["zermelo_school"].".zportal.nl/api/v3/appointments/?user=~me&valid=true&start=".strtotime($startAndEndDate[0])."&end=".strtotime($startAndEndDate[1] . " +1 day")."&fields=".implode("%2C", array("id", "appointmentInstance", "groups", "startTimeSlot", "start", "endTimeSlot", "end", "subjects", "teachers", "locations", "type", "valid", "cancelled", "locationChanged", "branchOfSchool"))."&access_token=".$_SESSION["zermelo_access_token"];
+			$url = "https://".$_SESSION["zermelo_school"].".zportal.nl/api/v3/appointments/?user=~me&valid=true&start=".strtotime($startAndEndDate[0])."&end=".strtotime($startAndEndDate[1] . " +1 day")."&fields=".implode("%2C", array("id", "appointmentInstance", "groups", "startTimeSlot", "start", "endTimeSlot", "end", "subjects", "teachers", "students", "locations", "type", "valid", "cancelled", "locationChanged", "branchOfSchool"))."&access_token=".$_SESSION["zermelo_access_token"];
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
 			// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->secure);
@@ -66,6 +66,10 @@
 				$lessonCount = $json["totalRows"];
 				for ($i = 0; $i < $lessonCount; $i++) {
 					$json["data"][$i]["day"] = intval(date("N", $json["data"][$i]["start"])) - 1;
+					$json["data"][$i]["students"] = count($json["data"][$i]["students"]);
+					if ($json["data"][$i]["students"] < 1) {
+						$json["data"][$i]["students"] = $defaultClassSize;
+					}
 				}
 				returnData($lessonCount . " lessen gevonden", $json["data"]);
 			}
