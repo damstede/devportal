@@ -20,7 +20,7 @@
     <header>
         <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span></h1>
         <div id="pageoptions">
-            <div class="extra-extra-info" id="addreservation" title="Kar reserveren" onclick="showAction('reservationadder'); setUpReservationAdder('','');">+</div>
+            <div class="extra-extra-info" id="addreservation" title="Kar reserveren" onclick="showAction('reservationadder'); setUpReservationAdder('','', '');">+</div>
             <div class="awesome" id="info" title="Informatie" onclick="showAction('basic-info');">&#xf05a;</div>
             <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
             <div class="awesome" id="signout" title="Uitloggen (ingelogd als <?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>)" onclick="window.location.href='unlink.php';">&#xf08b;</div>
@@ -47,27 +47,27 @@
             <tbody>
                 <tr id="week-hour-1">
                     <th class="hour">1.</th>
-                    <td class="lesson" data-lesson="1-1"></td>
-                    <td class="lesson" data-lesson="2-1"></td>
-                    <td class="lesson" data-lesson="3-1"></td>
-                    <td class="lesson" data-lesson="4-1"></td>
-                    <td class="lesson" data-lesson="5-1"></td>
+                    <td class="lesson" data-lesson="1-1" data-location=""></td>
+                    <td class="lesson" data-lesson="2-1" data-location=""></td>
+                    <td class="lesson" data-lesson="3-1" data-location=""></td>
+                    <td class="lesson" data-lesson="4-1" data-location=""></td>
+                    <td class="lesson" data-lesson="5-1" data-location=""></td>
                 </tr>
                 <tr id="week-hour-2">
                     <th class="hour">2.</th>
-                    <td class="lesson" data-lesson="1-2"></td>
-                    <td class="lesson" data-lesson="2-2"></td>
-                    <td class="lesson" data-lesson="3-2"></td>
-                    <td class="lesson" data-lesson="4-2"></td>
-                    <td class="lesson" data-lesson="5-2"></td>
+                    <td class="lesson" data-lesson="1-2" data-location=""></td>
+                    <td class="lesson" data-lesson="2-2" data-location=""></td>
+                    <td class="lesson" data-lesson="3-2" data-location=""></td>
+                    <td class="lesson" data-lesson="4-2" data-location=""></td>
+                    <td class="lesson" data-lesson="5-2" data-location=""></td>
                 </tr>
                 <tr id="week-hour-3">
                     <th class="hour">3.</th>
-                    <td class="lesson" data-lesson="1-3"></td>
-                    <td class="lesson" data-lesson="2-3"></td>
-                    <td class="lesson" data-lesson="3-3"></td>
-                    <td class="lesson" data-lesson="4-3"></td>
-                    <td class="lesson" data-lesson="5-3"></td>
+                    <td class="lesson" data-lesson="1-3" data-location=""></td>
+                    <td class="lesson" data-lesson="2-3" data-location=""></td>
+                    <td class="lesson" data-lesson="3-3" data-location=""></td>
+                    <td class="lesson" data-lesson="4-3" data-location=""></td>
+                    <td class="lesson" data-lesson="5-3" data-location=""></td>
                 </tr>
                 <tr>
                     <th class="hour break"></th>
@@ -75,19 +75,19 @@
                 </tr>
                 <tr id="week-hour-4">
                     <th class="hour">4.</th>
-                    <td class="lesson" data-lesson="1-4"></td>
-                    <td class="lesson" data-lesson="2-4"></td>
-                    <td class="lesson" data-lesson="3-4"></td>
-                    <td class="lesson" data-lesson="4-4"></td>
-                    <td class="lesson" data-lesson="5-4"></td>
+                    <td class="lesson" data-lesson="1-4" data-location=""></td>
+                    <td class="lesson" data-lesson="2-4" data-location=""></td>
+                    <td class="lesson" data-lesson="3-4" data-location=""></td>
+                    <td class="lesson" data-lesson="4-4" data-location=""></td>
+                    <td class="lesson" data-lesson="5-4" data-location=""></td>
                 </tr>
                 <tr id="week-hour-5">
                     <th class="hour">5.</th>
-                    <td class="lesson" data-lesson="1-5"></td>
-                    <td class="lesson" data-lesson="2-5"></td>
-                    <td class="lesson" data-lesson="3-5"></td>
-                    <td class="lesson" data-lesson="4-5"></td>
-                    <td class="lesson" data-lesson="5-5"></td>
+                    <td class="lesson" data-lesson="1-5" data-location=""></td>
+                    <td class="lesson" data-lesson="2-5" data-location=""></td>
+                    <td class="lesson" data-lesson="3-5" data-location=""></td>
+                    <td class="lesson" data-lesson="4-5" data-location=""></td>
+                    <td class="lesson" data-lesson="5-5" data-location=""></td>
                 </tr>
                 <tr>
                     <th class="hour break"></th>
@@ -95,35 +95,35 @@
                 </tr>
                 <tr id="week-hour-6">
                     <th class="hour">6.</th>
-                    <td class="lesson" data-lesson="1-6"></td>
-                    <td class="lesson" data-lesson="2-6"></td>
-                    <td class="lesson" data-lesson="3-6"></td>
-                    <td class="lesson" data-lesson="4-6"></td>
-                    <td class="lesson" data-lesson="5-6"></td>
+                    <td class="lesson" data-lesson="1-6" data-location=""></td>
+                    <td class="lesson" data-lesson="2-6" data-location=""></td>
+                    <td class="lesson" data-lesson="3-6" data-location=""></td>
+                    <td class="lesson" data-lesson="4-6" data-location=""></td>
+                    <td class="lesson" data-lesson="5-6" data-location=""></td>
                 </tr>
                 <tr id="week-hour-7">
                     <th class="hour">7.</th>
-                    <td class="lesson" data-lesson="1-7"></td>
-                    <td class="lesson" data-lesson="2-7"></td>
-                    <td class="lesson" data-lesson="3-7"></td>
-                    <td class="lesson" data-lesson="4-7"></td>
-                    <td class="lesson" data-lesson="5-7"></td>
+                    <td class="lesson" data-lesson="1-7" data-location=""></td>
+                    <td class="lesson" data-lesson="2-7" data-location=""></td>
+                    <td class="lesson" data-lesson="3-7" data-location=""></td>
+                    <td class="lesson" data-lesson="4-7" data-location=""></td>
+                    <td class="lesson" data-lesson="5-7" data-location=""></td>
                 </tr>
                 <tr id="week-hour-8">
                     <th class="hour">8.</th>
-                    <td class="lesson" data-lesson="1-8"></td>
-                    <td class="lesson" data-lesson="2-8"></td>
-                    <td class="lesson" data-lesson="3-8"></td>
-                    <td class="lesson" data-lesson="4-8"></td>
-                    <td class="lesson" data-lesson="5-8"></td>
+                    <td class="lesson" data-lesson="1-8" data-location=""></td>
+                    <td class="lesson" data-lesson="2-8" data-location=""></td>
+                    <td class="lesson" data-lesson="3-8" data-location=""></td>
+                    <td class="lesson" data-lesson="4-8" data-location=""></td>
+                    <td class="lesson" data-lesson="5-8" data-location=""></td>
                 </tr>
                 <tr id="week-hour-9">
                     <th class="hour">9.</th>
-                    <td class="lesson" data-lesson="1-9"></td>
-                    <td class="lesson" data-lesson="2-9"></td>
-                    <td class="lesson" data-lesson="3-9"></td>
-                    <td class="lesson" data-lesson="4-9"></td>
-                    <td class="lesson" data-lesson="5-9"></td>
+                    <td class="lesson" data-lesson="1-9" data-location=""></td>
+                    <td class="lesson" data-lesson="2-9" data-location=""></td>
+                    <td class="lesson" data-lesson="3-9" data-location=""></td>
+                    <td class="lesson" data-lesson="4-9" data-location=""></td>
+                    <td class="lesson" data-lesson="5-9" data-location=""></td>
                 </tr>
             </tbody>
         </table>
@@ -154,9 +154,10 @@
     }
     </script>
     <script>
-    function setUpReservationAdder(lessonDate, lessonHour) {
+    function setUpReservationAdder(lessonDate, lessonHour, lessonLocation) {
         document.getElementById("date").value = lessonDate;
         document.getElementById("hour").value = lessonHour;
+        document.getElementById("location").value = lessonLocation;
     }
 
     function reservationSubmit() {
@@ -393,9 +394,7 @@
     <script>
     schedule.init("<?PHP echo $_SESSION["user"]["code"]; ?>").then(function() {
         schedule.getCurrentWeekInfo().then(function(weekInfo) {
-            schedule.get(weekInfo[0], weekInfo[1]).then(function(reservations) {
-                schedule.load(reservations);
-            });
+            schedule.getAndLoad(weekInfo[0], weekInfo[1]);
         });
     });
     </script>

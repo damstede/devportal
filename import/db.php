@@ -21,7 +21,7 @@
             return mysqli_query($this->connection, $query);
         }
 
-        private function getStartAndEndDate($year, $week) {
+        public function getStartAndEndDate($year, $week) {
             // modified from https://stackoverflow.com/questions/4861384/php-get-start-and-end-date-of-a-week-by-weeknumber
             $dto = new DateTime();
             $dto->setISODate($year, $week);

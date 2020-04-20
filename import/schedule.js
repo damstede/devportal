@@ -37,6 +37,13 @@ var schedule = {
         for (var i = 0; i < 5; i++) {
             dayDates[i].innerHTML = "";
         }
+        var lessons = document.getElementsByClassName("lesson");
+        var lessonCount = lessons.length;
+        for (var i = 0; i < lessonCount; i++) {
+            if (lessons[i].className.indexOf("break") < 0) {
+                lessons[i].setAttribute("data-location", "");
+            }
+        }
     },
 
     reload: function() {
@@ -71,8 +78,27 @@ var schedule = {
                         var response = JSON.parse(request.responseText);
                         console.log(response);
                         if (response["type"] == "success") {
-                            document.getElementById('loading').style.display = 'none';
-                            resolve(response["data"]);
+                            var zRequest = new XMLHttpRequest();
+                            zRequest.open('POST', 'import/zschedule.php?year='+year+'&week='+week);
+                            zRequest.onload = function() {
+                                try {
+                                    var zResponse = JSON.parse(zRequest.responseText);
+                                    console.log(zResponse);
+                                    if (zResponse["type"] == "success") {
+                                        document.getElementById('loading').style.display = 'none';
+                                        resolve([response["data"], zResponse["data"]]);
+                                    }
+                                    else {
+                                        document.getElementById('loading').style.display = 'none';
+                                        reject(zResponse["message"]);
+                                    }
+                                }
+                                catch(e) {
+                                    document.getElementById('loading').style.display = 'none';
+                                    reject(e);
+                                }
+                            };
+                            zRequest.send();
                         }
                         else {
                             document.getElementById('loading').style.display = 'none';
@@ -104,19 +130,26 @@ var schedule = {
 
     getAndLoad: function(year, week) {
         return new Promise(function(resolve, reject) {
-            schedule.get(year, week).then(function(reservations) {
-                schedule.load(reservations);
+            schedule.get(year, week).then(function(results) {
+                schedule.load(results[0], results[1]);
                 resolve();
             });
         });
     },
 
-    load: function(reservations) {
+    load: function(reservations, zermeloSchedule) {
         console.log(reservations);
+        console.log(zermeloSchedule);
         document.getElementById('loading').style.display = 'table';
         var reservationCount = reservations.length;
         for (var i = 0; i < reservationCount; i++) {
             document.getElementById("week-hour-"+reservations[i]["hour"]).children[reservations[i]["day"]+1].appendChild(schedule.createResElem(reservations[i]));
+        }
+        var lessonsCount = zermeloSchedule.length;
+        for (var i = 0; i < lessonsCount; i++) {
+            if (zermeloSchedule[i]["startTimeSlot"] != null) {
+                document.getElementById("week-hour-"+zermeloSchedule[i]["startTimeSlot"]).children[zermeloSchedule[i]["day"]+1].setAttribute("data-location", zermeloSchedule[i]["locations"][0]);
+            }
         }
         schedule.fillInResAddBtns();
         document.getElementById('loading').style.display = 'none';
@@ -158,8 +191,9 @@ var schedule = {
             if (lessons[i].className.indexOf("break") < 0) {
                 var lessonDay = parseInt(lessons[i].getAttribute("data-lesson").split("-")[0]);
                 var lessonHour = parseInt(lessons[i].getAttribute("data-lesson").split("-")[1]);
+                var lessonLocation = lessons[i].getAttribute("data-location");
                 var clonedBtn = resAddBtn.cloneNode(true);
-                clonedBtn.setAttribute("onclick", "showAction('reservationadder'); setUpReservationAdder('"+schedule.dates[lessonDay-1].join("-")+"', "+lessonHour+");");
+                clonedBtn.setAttribute("onclick", "showAction('reservationadder'); setUpReservationAdder('"+schedule.dates[lessonDay-1].join("-")+"', "+lessonHour+", '"+lessonLocation+"');");
                 lessons[i].appendChild(clonedBtn);
             }
         }
