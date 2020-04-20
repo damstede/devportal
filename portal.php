@@ -328,9 +328,10 @@
             <div class="actioncontent">
                 <div class="actionheader">Er ging iets fout</div>
                 <div class="actionclose" data-action="loadingerror" onclick="hideAction(this);">&#x2716;</div>
-                <p>Kon het rooster voor de gekozen week niet ophalen. Probeer het later opnieuw.</p>
+                <p>Kon het rooster voor de gekozen week niet ophalen. Het kan helpen even uit te loggen en opnieuw in te loggen. Wil je dit nu doen?</p>
                 <div class="actionbuttons">
-                    <input class="button" type="button" value="Oké" data-action="loadingerror" onclick="hideAction(this);" />
+                    <input class="button extra" type="button" value="Nee" data-action="loadingerror" onclick="hideAction(this);" />
+                    <input class="button" type="button" value="Ja" data-action="loadingerror" onclick="hideAction(this); window.location.href='unlink.php';" />
                 </div>
             </div>
         </div>
