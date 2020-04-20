@@ -6,6 +6,7 @@
     <script type="module">
         import QrScanner from './import/qr-scanner.min.js';
         QrScanner.WORKER_PATH = 'import/qr-scanner-worker.min.js';
+        var usingQr = false;
         var scanner = false;
         QrScanner.hasCamera().then(function(hasCamera) {
             if (hasCamera) {
@@ -20,7 +21,7 @@
                             document.getElementById("loading").style.display = "table";
                             document.getElementById("loading").style.display = "none";
                             if (zResult["institution"] === "damstedelyceum") {
-                                scanner.stop();
+                                pauseCameraAccess();
                                 console.log("QR-scanner gestopt");
                                 document.getElementById('zermelo-code').value = zResult["code"];
                                 showAction('zermelolink');
@@ -36,6 +37,12 @@
                         alert("Ongeldige Zermelo QR-code");
                     }
                 });
+                document.getElementById("signin-btn-camera").disabled = false;
+                document.getElementById("signin-btn-camera").removeAttribute("title");
+            }
+            else {
+                document.getElementById("signin-btn-camera").disabled = true;
+                document.getElementById("signin-btn-camera").setAttribute("title", "Geen camera beschikbaar, of je browser wordt niet ondersteund. Gebruik een toegangscode om in te loggen op dit apparaat.");
             }
         });
         window.requestCameraAccess = function() {
@@ -45,14 +52,19 @@
                     console.log("QR-scanner gestart");
                     showAction('qrscanner');
                     document.getElementById("loading").style.display = "none";
+                    usingQr = true;
                 }).catch(function(e) {
-                    alert("Een onverwachte fout is opgetreden.\nGebruik een toegangscode om in te loggen op dit apparaat.");
+                    alert("Geen camera's gevonden om te gebruiken, of je hebt geen toegang tot je camera gegeven.\nGebruik een toegangscode om in te loggen op dit apparaat.");
                     document.getElementById("loading").style.display = "none";
+                    document.getElementById("signin-btn-camera").disabled = true;
+                    document.getElementById("signin-btn-camera").setAttribute("title", "Geen camera beschikbaar, of je browser wordt niet ondersteund. Gebruik een toegangscode om in te loggen op dit apparaat.");
                 });
             }
             else {
                 alert("Geen camera's gevonden om te gebruiken, of je hebt geen toegang tot je camera gegeven.\nGebruik een toegangscode om in te loggen op dit apparaat.");
                 document.getElementById("loading").style.display = "none";
+                document.getElementById("signin-btn-camera").disabled = true;
+                document.getElementById("signin-btn-camera").setAttribute("title", "Geen camera beschikbaar, of je browser wordt niet ondersteund. Gebruik een toegangscode om in te loggen op dit apparaat.");
             }
         }
         window.pauseCameraAccess = function() {
@@ -83,7 +95,7 @@
             <li>Kies hieronder hoe je wilt inloggen: door de QR-code te scannen, of handmatig de toegangscode in te vullen.</li>
         </ol>
         <div id="signin-chooser">
-            <button id="signin-btn-camera" onclick="requestCameraAccess();">QR-code scannen</button>
+            <button id="signin-btn-camera" onclick="requestCameraAccess();" disabled title="Geen camera beschikbaar, of je browser wordt niet ondersteund. Gebruik een toegangscode om in te loggen op dit apparaat.">QR-code scannen</button>
             <button id="signin-btn-code" onclick="showAction('zermelolink');">Handmatig inloggen</button>
         </div>
 
@@ -144,10 +156,10 @@
             <div class="inneraction">
                 <div class="actioncontent">
                     <div class="actionheader">Er ging iets fout</div>
-                    <div class="actionclose" data-action="loginerror" onclick="hideAction(this);">&#x2716;</div>
+                    <div class="actionclose" data-action="loginerror" onclick="hideAction(this); if (usingQr) { requestCameraAccess(); }">&#x2716;</div>
                     <p id="loginerror-msg">Een onbekende fout is opgetreden. Probeer het later opnieuw.</p>
                     <div class="actionbuttons">
-                        <input class="button" type="button" value="Oké" data-action="loginerror" onclick="hideAction(this);" />
+    <input class="button" type="button" value="Oké" data-action="loginerror" onclick="hideAction(this); if (usingQr) { requestCameraAccess(); }" />
                     </div>
                 </div>
             </div>

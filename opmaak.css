@@ -344,6 +344,12 @@ header #pageoptions > *:hover {
 	background: #888888;
 }
 
+.actionbuttons .button[disabled], button[disabled] {
+	background: #454545 !important;
+	color: #767676 !important;
+	cursor: not-allowed !important;
+}
+
 input[type=text], input[type=file], input[type=date], input[type=number] {
 	display: block;
 	padding: 4px;
