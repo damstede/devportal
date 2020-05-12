@@ -24,7 +24,7 @@
         public function getStartAndEndDate($year, $week) {
             // modified from https://stackoverflow.com/questions/4861384/php-get-start-and-end-date-of-a-week-by-weeknumber
             $dto = new DateTime();
-            $dto->setISODate($year, $week);
+            $dto->setTimestamp($year, $week);
             $ret = array();
             array_push($ret, $dto->format('Y-m-d'));
             $dto->modify('+4 days');
@@ -111,6 +111,23 @@
             }
         }
 
+        public function userHasNotReservedYet($isTeacher, $user, $date, $hour) {
+            // only students may reserve once per hour. Teachers may reserve as much as they like.
+            if ($isTeacher) {
+                return true;
+            }
+            else {
+                $result = $this->runQuery("SELECT * FROM damstede.cartreservations WHERE USER='".$this->makeSafe($user)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
+                if ($result != false) {
+                    if (mysqli_num_rows($result) > 0) {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public function reserveCart($cartId, $date, $hour, $location, $user, $teacher, $amount) {
             if ($this->getAmountOfDevicesLeft($cartId, $date, $hour) >= $amount) {
                 $result = $this->runQuery("INSERT INTO damstede.cartreservations (cart_id, date, hour, location, user, teacher, amount) VALUES ('".intval($cartId)."', '".date("Y-m-d", strtotime($date))."', '".intval($hour)."', '".$this->makeSafe($location)."', '".$this->makeSafe($user)."', '".$this->makeSafe($teacher)."', '".intval($amount)."')");
@@ -180,6 +197,19 @@
             else {
                 return false;
             }
+        }
+
+        public function getMyUpcomingReservations($user, $weeks = 4, $cartId = null) {
+            $reservations = array();
+            $sql = "SELECT * FROM damstede.cartreservations WHERE USER='".$this->makeSafe($user)."' AND DATE(date) >= STR_TO_DATE('" . $this->makeSafe(date('Y-m-d', strtotime('-1 week'))) . "', '%Y-%m-%d') AND DATE(date) <= STR_TO_DATE('" . $this->makeSafe(date('Y-m-d', strtotime('+4 weeks'))) . "', '%Y-%m-%d')";
+            if (!empty($cartId)) {
+                $sql .= " AND cart_id=".intval($cartId);
+            }
+            $result = $this->runQuery($sql);
+            while ($row = mysqli_fetch_assoc($result)) {
+                array_push($reservations, $this->formatReservation($row));
+            }
+            return $reservations;
         }
     }
 ?>

@@ -12,6 +12,6 @@
             setcookie($name, '', time()-1000, '/');
         }
     }
-    header("Location: link.php");
+    header("Location: index.php");
 	exit();
 ?>

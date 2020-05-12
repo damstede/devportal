@@ -12,13 +12,13 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <title>Damstede Device Portaal</title>
+    <title>Damstede Device Portaal voor Docenten</title>
     <?PHP include_once("import/headers.html"); ?>
     <script src="import/schedule.js"></script>
 </head>
 <body>
     <header>
-        <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span></h1>
+        <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span><span class="extra-info"> voor Docenten</span></h1>
         <div id="pageoptions">
             <div class="extra-extra-info" id="addreservation" title="Nieuwe reservering aanmaken" onclick="showAction('reservationadder'); setUpReservationAdder('','', '', 32);">+</div>
             <div class="awesome" id="info" title="Informatie" onclick="showAction('basic-info');">&#xf05a;</div>
@@ -263,7 +263,7 @@
                         </tr>
                         <tr>
 							<th>Lokaal</th>
-							<td><input type="text" id="location" name="location" autocomplete="off" placeholder="Voor welk lokaal reserveer je?" size="65" maxlength="6" /></td>
+							<td><input type="text" id="location" name="location" autocomplete="off" placeholder="Voor welk lokaal reserveer je?" size="65" maxlength="12" /></td>
 						</tr>
                         <tr>
                             <th>Kar/lokaal</th>

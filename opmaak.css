@@ -638,6 +638,18 @@ label {
 	pointer-events: initial;
 }
 
+.reservation-list-item {
+
+}
+
+.reservation-list-item.over {
+	font-style: italic;
+}
+
+.reservation-list-item.cancelled {
+	text-decoration: line-through;
+}
+
 #spinner {
 	display: inline-block;
 	width: 60px;

@@ -86,6 +86,10 @@
             returnError("Apparaatkar of lokaal ".intval($_POST["cart"])." bestaat niet.");
         }
 
+        if (!$cart["available"]) {
+            returnError("Deze kar of dit lokaal kan momenteel niet gereserveerd worden. Probeer het later opnieuw.");
+        }
+
         if (!$cart["amount_choosable"]) {
             if ($damstedeDB->isReserved($_POST["cart"], $_POST["date"], $_POST["hour"], $_POST["amount"])) {
                 returnError("Deze kar of dit lokaal is al gereserveerd voor dit uur. Probeer een ander uit het dropdown-menu.");

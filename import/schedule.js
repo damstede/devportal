@@ -176,7 +176,7 @@ var schedule = {
             resElem.className += " cancellable";
             contents += '<a class="reservation-cancel" title="Reservering annuleren" href="javascript:void(0)" onclick="setUpReservationCanceller('+res["id"]+'); showAction(\'reservationcancel\');">&#x2716;</a>';
         }
-        contents += '<b>' + schedule.carts[res["cart_id"]]["name"] + (res["cart_type"] == 1 ? ',<span class="extra-info"> lokaal</span> '+res["location"] : ', '+res["amount"]+' plaatsen') + '</b><br/>' + res["user"];
+        contents += '<b>' + schedule.carts[res["cart_id"]]["name"] + (res["cart_type"] == 1 ? ',<span class="extra-info"> lokaal</span> '+res["location"] : ', '+res["amount"]+' plaats'+(res["amount"] > 1 ? "en" : "")) + '</b><br/>' + res["user"];
         if (res["teacher"] != null) {
             contents += ', namens:<br/><i>' + res["teacher"] + '</i>';
         }

@@ -81,7 +81,7 @@
 </head>
 <body onload="document.getElementById('loading').style.display = 'none';">
     <header>
-        <h1 id="pagetitle">Log in via Zermelo - Damstede Device Portaal</h1>
+        <h1 id="pagetitle">Log in via Zermelo - Damstede Device Portaal<span class="extra-info"> voor Docenten</span></h1>
         <div id="pageoptions">
             <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
         </div>
