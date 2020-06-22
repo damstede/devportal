@@ -10,7 +10,8 @@
     require_once("import/db.php");
     $damstedeDB = new DamstedeDB();
     $carts = $damstedeDB->getDeviceCarts();
-    $mediatheek = $damstedeDB->getDeviceCart(5);
+    $defaultOpeningHours = $damstedeDB->getDefaultOpeningHours($mediatheekId);
+    $mediatheek = $damstedeDB->getDeviceCart($mediatheekId);
     $upcomingReservations = $damstedeDB->getMyUpcomingReservations($_SESSION["user"]["code"], 4);
 
     function getCartById($id) {
@@ -23,6 +24,15 @@
         }
         return null;
     }
+
+    function openingHoursToText($hours) {
+        if ($hours["opening_hours_start"] == 0 && $hours["opening_hours_end"] == 0) {
+            return "gesloten";
+        }
+        else {
+            return $hours["opening_hours_start"] . "<sup>e</sup> t/m " . $hours["opening_hours_end"] . "<sup>e</sup> uur";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -34,12 +44,25 @@
     <header>
         <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span><span class="extra-info"> voor Leerlingen</span></h1>
         <div id="pageoptions">
-            <div id="addreservation" title="Nieuwe reservering aanmaken" onclick="showAction('reservationadder');">+</div>
+            <div id="addreservation" title="Nieuwe reservering aanmaken" onclick="showAction('reservationadder'); checkOpen();">+</div>
             <div class="awesome" id="signout" title="Uitloggen (ingelogd als <?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>)" onclick="window.location.href='unlink.php';">&#xf08b;</div>
         </div>
     </header>
 
     <div id="content">
+        <h2>Algemene openingstijden mediatheek</h2>
+        <hr />
+
+        <ul class="opening-schedule">
+            <li><b>Maandag:</b> <?PHP echo openingHoursToText($defaultOpeningHours[0]); ?></li>
+            <li><b>Dinsdag:</b> <?PHP echo openingHoursToText($defaultOpeningHours[1]); ?></li>
+            <li><b>Woensdag:</b> <?PHP echo openingHoursToText($defaultOpeningHours[2]); ?></li>
+            <li><b>Donderdag:</b> <?PHP echo openingHoursToText($defaultOpeningHours[3]); ?></li>
+            <li><b>Vrijdag:</b> <?PHP echo openingHoursToText($defaultOpeningHours[4]); ?></li>
+        </ul>
+
+        <br>
+        
         <h2>Jouw reserveringen</h2>
         <hr />
 
@@ -57,48 +80,7 @@
             for (var i = 0; i < datesToParse.length; i++) {
                 var date = new Date(datesToParse[i].innerHTML);
                 var parsedDate = date.getDate() + " ";
-                switch (date.getMonth()) {
-                    case 1:
-                        parsedDate += "januari";
-                        break;
-                    case 2:
-                        parsedDate += "februari";
-                        break;
-                    case 3:
-                        parsedDate += "maart";
-                        break;
-                    case 4:
-                        parsedDate += "april";
-                        break;
-                    case 5:
-                        parsedDate += "mei";
-                        break;
-                    case 6:
-                        parsedDate += "juni";
-                        break;
-                    case 7:
-                        parsedDate += "juli";
-                        break;
-                    case 8:
-                        parsedDate += "augustus";
-                        break;
-                    case 9:
-                        parsedDate += "september";
-                        break;
-                    case 10:
-                        parsedDate += "oktober";
-                        break;
-                    case 11:
-                        parsedDate += "november";
-                        break;
-                    case 12:
-                        parsedDate += "december";
-                        break;
-                    default:
-                        parsedDate += date.getMonth();
-                        break;
-                }
-                datesToParse[i].innerHTML = parsedDate;
+                datesToParse[i].innerHTML = parsedDate + monthNumToName(date.getMonth()+1);
             }
         </script>
     </div>
@@ -184,7 +166,7 @@
 								<input type="date" name="date" id="date" value="<?PHP echo date("Y-m-d"); ?>" min="<?PHP echo date("Y-m-d"); ?>" max="<?PHP echo date("Y-m-d", strtotime("+4 weeks")); ?>" placeholder="YYYY-MM-DD" required />
 							</td>
                         </tr>
-                        <tr>
+                        <tr id="hour-row">
                             <th>Lesuur</th>
                             <td>
                                 <select name="hour" id="hour" required>
@@ -202,9 +184,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><br/></td>
+                            <td colspan="2" style="text-align: center;"><span id="openwarning"><br/></span></td>
                         </tr>
-                        <tr>
+                        <tr id="available-space-row">
                             <td colspan="2" style="text-align: center;">Aantal plaatsen beschikbaar: <span id="available-space">--/<?PHP echo $mediatheek["dev_amount"]; ?></span></td>
                             <script>
                                 var checkXhr = null;
@@ -227,14 +209,73 @@
                                     }
                                 }
 
+                                var openXhr = null;
+                                function checkOpen(event) {
+                                    var chosenDate = document.getElementById("date").value;
+                                    if (chosenDate == null || chosenDate == "") {
+                                        document.getElementById("openwarning").innerHTML = "<br/>";
+                                    }
+                                    else {
+                                        document.getElementById("openwarning").innerHTML = "<br/>";
+                                        openXhr = new XMLHttpRequest();
+                                        openXhr.open('GET', 'https://devices.damstede.eu/import/openinghours.php?cart=5&date='+chosenDate);
+                                        openXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                        openXhr.onload = function() {
+                                            var response = JSON.parse(openXhr.responseText);
+                                            if (response["type"] == "success") {
+                                                response = response["data"];
+                                                var hourInput = document.getElementById("hour");
+                                                for (var i = 1; i <= 9; i ++) {
+                                                    hourInput.children[i].disabled = response["opening_hours"].indexOf(i) == -1;
+                                                }
+                                                if (response["is_default"]) {
+                                                    if (response["opening_hours"].length == 0) {
+                                                        if (response["weekday"] > 0 && response["weekday"] < 6) {
+                                                            document.getElementById("openwarning").innerHTML = "<b>De mediatheek is op "+response["weekday_text"]+"en gesloten.</b>";
+                                                        }
+                                                        else {
+                                                            document.getElementById("openwarning").innerHTML = "<b>De mediatheek is in het weekend gesloten.</b>";
+                                                        }
+                                                        document.getElementById("available-space-row").style.display = "none";
+                                                        document.getElementById("hour-row").style.display = "none";
+                                                        document.getElementById("reservebtn").disabled = true;
+                                                    }
+                                                    else {
+                                                        document.getElementById("openwarning").innerHTML = "<br/>";
+                                                        document.getElementById("available-space-row").style.display = null;
+                                                        document.getElementById("hour-row").style.display = null;
+                                                        document.getElementById("reservebtn").disabled = false;
+                                                    }
+                                                }
+                                                else {
+                                                    if (response["opening_hours"].length > 0) {
+                                                        document.getElementById("openwarning").innerHTML = "<b>Let op: gewijzigde openingstijden!</b><br/>Op deze datum is de mediatheek geopend van het "+response["opening_hours_start"]+"<sup>e</sup> t/m het "+response["opening_hours_end"]+"<sup>e</sup> uur.";
+                                                        document.getElementById("available-space-row").style.display = null;
+                                                        document.getElementById("hour-row").style.display = null;
+                                                        document.getElementById("reservebtn").disabled = false;
+                                                    }
+                                                    else {
+                                                        document.getElementById("openwarning").innerHTML = "<b>Let op: gewijzigde openingstijden!</b><br/>Op deze datum is de mediatheek gesloten. Probeer een andere datum.";
+                                                        document.getElementById("available-space-row").style.display = "none";
+                                                        document.getElementById("hour-row").style.display = "none";
+                                                        document.getElementById("reservebtn").disabled = true;
+                                                    }
+                                                }
+                                            }
+                                        };
+                                        openXhr.send();
+                                    }
+                                }
+
                                 document.getElementById("date").addEventListener("change", checkAvailable);
+                                document.getElementById("date").addEventListener("change", checkOpen);
                                 document.getElementById("hour").addEventListener("change", checkAvailable);
                             </script>
                         </tr>
 					</table>
 					<div class="actionbuttons">
 						<input class="button extra" type="button" value="Annuleren" data-action="reservationadder" onclick="hideAction(this);" />
-						<input class="button" type="button" value="Reserveer" name="reserve" onclick="reservationSubmit();" />
+						<input class="button" type="button" value="Reserveer" name="reserve" onclick="reservationSubmit();" id="reservebtn" />
 					</div>
 				</form>
 			</div>
@@ -245,10 +286,10 @@
         <div class="inneraction">
             <div class="actioncontent">
                 <div class="actionheader">Er ging iets fout</div>
-                <div class="actionclose" data-action="reservationerror" onclick="hideAction(this); showAction('reservationadder');">&#x2716;</div>
+                <div class="actionclose" data-action="reservationerror" onclick="hideAction(this); showAction('reservationadder'); checkOpen();">&#x2716;</div>
                 <p id="reservation-error-msg">Een onbekende fout is opgetreden. Probeer het later opnieuw.</p>
                 <div class="actionbuttons">
-                    <input class="button" type="button" value="Oké" data-action="reservationerror" onclick="hideAction(this); showAction('reservationadder');" />
+                    <input class="button" type="button" value="Oké" data-action="reservationerror" onclick="hideAction(this); showAction('reservationadder'); checkOpen();" />
                 </div>
             </div>
         </div>
@@ -317,29 +358,4 @@
 			</div>
 		</div>
 	</div>
-
-    <script>
-    function showAction(name) {
-        var actions = document.getElementsByClassName("action");
-        for (var i = 0; i < actions.length; i++) {
-            actions[i].style.display = "none";
-        }
-        
-        var action = document.getElementById(name);
-        action.style.display = "table";
-        if (action.className.indexOf("important") > -1) {
-            action.className += " anim";
-        }
-    }
-    
-    function hideAction(elem) {
-        var actionName = elem.getAttribute("data-action");
-        
-        var action = document.getElementById(actionName);
-        action.style.display = "none";
-        if (action.className.indexOf("important") > -1) {
-            action.className = action.className.replace("anim", "").trim();
-        }
-    }
-    </script>
 </body>

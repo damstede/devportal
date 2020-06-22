@@ -650,6 +650,26 @@ label {
 	text-decoration: line-through;
 }
 
+table.columns {
+	width: 100%;
+	table-layout: fixed;
+}
+
+table.columns td {
+	width: 50%;
+	vertical-align: top;
+}
+
+.opening-schedule {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.opening-schedule sup {
+	line-height: 0;
+}
+
 #spinner {
 	display: inline-block;
 	width: 60px;

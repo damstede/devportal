@@ -101,6 +101,13 @@
 
         public function getAmountOfDevicesLeft($cartId, $date, $hour) {
             $cart = $this->getDeviceCart($cartId);
+            $openingHours = $this->getOpeningHours($cartId, $date);
+            if (!empty($openingHours["max_devs"])) {
+                $cart["dev_amount"] = $openingHours["max_devs"];
+            }
+            if (!in_array($hour, $openingHours["opening_hours"])) {
+                return 0;
+            }
             $result = $this->runQuery("SELECT SUM(amount) AS reserved_amount FROM damstede.cartreservations WHERE cart_id='".intval($cartId)."' AND DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') AND hour='".intval($hour)."' AND cancelled=0 LIMIT 1");
             if ($result != false) {
                 $reservedAmount = mysqli_fetch_assoc($result)["reserved_amount"];
@@ -210,6 +217,126 @@
                 array_push($reservations, $this->formatReservation($row));
             }
             return $reservations;
+        }
+
+        public function userIsManager($user) {
+            $sql = "SELECT * FROM damstede.managers WHERE username='".$this->makeSafe($user)."' LIMIT 1";
+            $result = $this->runQuery($sql);
+            return ($result != false && mysqli_num_rows($result) > 0);
+        }
+
+        private function dayNumToText($day) {
+            switch ($day) {
+                case 1:
+                    return "maandag";
+                case 2:
+                    return "dinsdag";
+                case 3:
+                    return "woensdag";
+                case 4:
+                    return "donderdag";
+                case 5:
+                    return "vrijdag";
+                case 6:
+                    return "zaterdag";
+                case 7:
+                case 0:
+                    return "zondag";
+                default:
+                    return null;
+            }
+        }
+
+        private function formatOpeningHours($hours) {
+            $hours["rule_num"] = intval($hours["rule_num"]);
+            if (isset($hours["weekday"]) && !empty($hours["weekday"])) {
+                $hours["weekday"] = intval($hours["weekday"]);
+            }
+            else {
+                $hours["weekday"] = intval(date("w", strtotime($hours["date"])));
+                if ($hours["weekday"] == 0) {
+                    $hours["weekday"] = 7;
+                }
+            }
+            if (isset($hours["is_default"])) {
+                $hours["is_default"] = intval($hours["is_default"]) > 0;
+            }
+            $hours["weekday_text"] = $this->dayNumToText($hours["weekday"]);
+            $hours["opening_hours_start"] = intval($hours["opening_hours_start"]);
+            $hours["opening_hours_end"] = intval($hours["opening_hours_end"]);
+            $hours["opening_hours"] = array();
+            if ($hours["opening_hours_start"] > 0) {
+                for ($i = $hours["opening_hours_start"]; $i <= $hours["opening_hours_end"]; $i++) {
+                    array_push($hours["opening_hours"], $i);
+                }
+            }
+            $hours["max_devs"] = intval($hours["max_devs"]);
+            return $hours;
+        }
+
+        public function getOpeningHours($cartId, $date) {
+            $weekday = intval(date("w", strtotime($date)));
+            if ($weekday == 0) {
+                $weekday = 7;
+            }
+            $openingHours = $this->createFakeOpeningHours($weekday);
+            $sql = "SELECT rule_num, is_default AS weekday, date, is_default, opening_hours_start, opening_hours_end, max_devs FROM damstede.openinghours WHERE cart_id=".intval($cartId)." AND (DATE(date)=STR_TO_DATE('".$this->makeSafe($date)."', '%Y-%m-%d') OR is_default=".intval($weekday).") ORDER BY is_default ASC LIMIT 2";
+            $result = $this->runQuery($sql);
+            if ($result != false) {
+                if (mysqli_num_rows($result) > 0) {
+                    $openingHours = $this->formatOpeningHours(mysqli_fetch_assoc($result));
+                }
+            }
+            return $openingHours;
+        }
+
+        private function createFakeOpeningHours($day) {
+            $fake = array();
+            $fake["rule_num"] = -1;
+            $fake["weekday"] = $day;
+            $fake["weekday_text"] = $this->dayNumToText($day);
+            $fake["is_default"] = true;
+            if ($day > 0 && $day < 6) {
+                $fake["opening_hours_start"] = 1;
+                $fake["opening_hours_end"] = 9;
+                $fake["opening_hours"] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $fake["max_devs"] = null;
+            }
+            else {
+                $fake["opening_hours_start"] = 0;
+                $fake["opening_hours_end"] = 0;
+                $fake["opening_hours"] = [];
+                $fake["max_devs"] = 0;
+            }
+            return $fake;
+        }
+
+        public function getDefaultOpeningHours($cartId) {
+            $openingHours = array();
+            for ($i = 0; $i < 5; $i++) {
+                $openingHours[$i] = $this->createFakeOpeningHours($i+1);
+            }
+            $sql = "SELECT rule_num, is_default AS weekday, opening_hours_start, opening_hours_end, max_devs FROM damstede.openinghours WHERE cart_id=".intval($cartId)." AND is_default>0 ORDER BY is_default ASC LIMIT 5";
+            $result = $this->runQuery($sql);
+            if ($result != false) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $row = $this->formatOpeningHours($row);
+                    $openingHours[$row["weekday"]-1] = $row;
+                }
+            }
+            return $openingHours;
+        }
+
+        public function getScheduledOpeningHours($cartId) {
+            $openingHours = array();
+            $sql = "SELECT rule_num, date, opening_hours_start, opening_hours_end, max_devs FROM damstede.openinghours WHERE cart_id=".intval($cartId)." AND is_default=0 AND date >= CURDATE() ORDER BY date ASC";
+            $result = $this->runQuery($sql);
+            if ($result != false) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    array_push($openingHours, $this->formatOpeningHours($row));
+                }
+            }
+            return $openingHours;
         }
     }
 ?>

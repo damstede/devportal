@@ -21,25 +21,7 @@
         
         <br />
         <div id="my-signin2" data-onsuccess="onSignIn"></div>
-
-        <script>
-        function showAction(name) {
-            var actions = document.getElementsByClassName("action");
-            for (var i = 0; i < actions.length; i++) {
-                actions[i].style.display = "none";
-            }
-            
-            var action = document.getElementById(name);
-            action.style.display = "table";
-        }
         
-        function hideAction(elem) {
-            var actionName = elem.getAttribute("data-action");
-            
-            var action = document.getElementById(actionName);
-            action.style.display = "none";
-        }
-        </script>
         <script>
 
         function onGSuccess(googleUser) {

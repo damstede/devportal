@@ -73,13 +73,13 @@
         require_once("nogit.php");
         $damstedeDB = new DamstedeDB();
         
-        $cart = $damstedeDB->getDeviceCart(5);
+        $cart = $damstedeDB->getDeviceCart($mediatheekId);
 
         if (!$cart["available"]) {
             returnError("Reserveren is momenteel niet mogelijk. Probeer het later opnieuw.");
         }
 
-        $devicesLeft = $damstedeDB->getAmountOfDevicesLeft(5, $_POST["date"], $_POST["hour"]);
+        $devicesLeft = $damstedeDB->getAmountOfDevicesLeft($mediatheekId, $_POST["date"], $_POST["hour"]);
         if ($devicesLeft < 1) {
             returnError("Er is in het gekozen lesuur op deze datum geen plek meer in de mediatheek. Kies een ander lesuur.");
         }
@@ -90,7 +90,7 @@
 
         // ERROR HANDLING END
 
-        $reserved = $damstedeDB->reserveCart(5, $_POST["date"], $_POST["hour"], "Mediatheek", $_SESSION["user"]["code"], $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"], 1);
+        $reserved = $damstedeDB->reserveCart($mediatheekId, $_POST["date"], $_POST["hour"], "Mediatheek", $_SESSION["user"]["code"], $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"], 1);
         if ($reserved != false) {
             returnData("Je reservering is geplaatst!", null);
         }
