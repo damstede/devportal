@@ -21,6 +21,7 @@
         <h1 id="pagetitle"><span class="extra-extra-info">Damstede </span><span>Device Portaal</span><span class="extra-info"> voor Docenten</span></h1>
         <div id="pageoptions">
             <div class="extra-extra-info" id="addreservation" title="Nieuwe reservering aanmaken" onclick="showAction('reservationadder'); setUpReservationAdder('','', '', 32);">+</div>
+            <?PHP if ($damstedeDB->userIsManager($_SESSION["user"]["code"])) { ?><div class="awesome" id="management" title="Mediatheek beheer" onclick="window.location.href='manager.php';">&#xf017;</div><?PHP } ?>
             <div class="awesome" id="info" title="Informatie" onclick="showAction('basic-info');">&#xf05a;</div>
             <div class="awesome" id="manual" title="Handleiding openen (PDF)" onclick="window.open('HandleidingDevicePortalDamstede.pdf');">&#xf02d;</div>
             <div class="awesome" id="signout" title="Uitloggen (ingelogd als <?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>)" onclick="window.location.href='unlink.php';">&#xf08b;</div>
@@ -128,31 +129,6 @@
             </tbody>
         </table>
     </div>
-
-    <script>
-    function showAction(name) {
-        var actions = document.getElementsByClassName("action");
-        for (var i = 0; i < actions.length; i++) {
-            actions[i].style.display = "none";
-        }
-        
-        var action = document.getElementById(name);
-        action.style.display = "table";
-        if (action.className.indexOf("important") > -1) {
-            action.className += " anim";
-        }
-    }
-    
-    function hideAction(elem) {
-        var actionName = elem.getAttribute("data-action");
-        
-        var action = document.getElementById(actionName);
-        action.style.display = "none";
-        if (action.className.indexOf("important") > -1) {
-            action.className = action.className.replace("anim", "").trim();
-        }
-    }
-    </script>
     <script>
     function setUpReservationAdder(lessonDate, lessonHour, lessonLocation, preferredAmount) {
         document.getElementById("date").value = lessonDate;
@@ -312,7 +288,11 @@
 						<tr>
 							<th>Namens</th>
 							<td><input type="text" id="teacher" name="teacher" autocomplete="off" placeholder="Namens wie reserveer je?" size="65" maxlength="32" value="<?PHP echo $_SESSION["user"]["firstName"]." ".$_SESSION["user"]["lastName"]; ?>" /></td>
-						</tr>
+                        </tr>
+                        <tr>
+                            <th>Mail Peter niet</th>
+                            <td><input type="checkbox" value="true" name="skip_mail" id="skip_mail" /> <label for="skip_mail"><small>(alleen van toepassing op lokalen)</small></label></td>
+                        </tr>
 					</table>
 					<div class="actionbuttons">
 						<input class="button extra" type="button" value="Annuleren" data-action="reservationadder" onclick="hideAction(this);" />
@@ -437,6 +417,7 @@
                     <div class="actionheader">Reservering annuleren</div>
                     <div class="actionclose" data-action="reservationcancel" onclick="hideAction(this);">&#x2716;</div>
                     <p>Weet je zeker dat je deze reservering wilt annuleren?</p>
+                    <input type="checkbox" value="true" name="skip_mail" id="skip_mail" /> <label for="skip_mail">Mail Peter niet (alleen van toepassing op lokalen)</label>
                     <input type="hidden" id="cancel-id" name="id" value="" />
                     <div class="actionbuttons">
                         <input class="button extra" type="button" value="Nee" data-action="reservationcancel" onclick="hideAction(this);" />

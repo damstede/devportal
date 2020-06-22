@@ -8,3 +8,87 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Damstede Device Portaal" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <script>
+    function showAction(name) {
+        var actions = document.getElementsByClassName("action");
+        for (var i = 0; i < actions.length; i++) {
+            actions[i].style.display = "none";
+        }
+        
+        var action = document.getElementById(name);
+        action.style.display = "table";
+        if (action.className.indexOf("important") > -1) {
+            action.className += " anim";
+        }
+    }
+    
+    function hideAction(elem) {
+        var actionName = elem.getAttribute("data-action");
+        
+        var action = document.getElementById(actionName);
+        action.style.display = "none";
+        if (action.className.indexOf("important") > -1) {
+            action.className = action.className.replace("anim", "").trim();
+        }
+    }
+    </script>
+    <script>
+    function weekDayNumToName(weekday) {
+        switch (weekday) {
+            case 1:
+                return "maandag";
+            case 2:
+                return "dinsdag";
+            case 3:
+                return "woensdag";
+            case 4:
+                return "donderdag";
+            case 5:
+                return "vrijdag";
+            case 6:
+                return "zaterdag";
+            case 7:
+                return "zondag";
+        }
+    }
+
+    function monthNumToName(month) {
+        switch (month) {
+            case 1:
+                return "januari";
+            case 2:
+                return "februari";
+            case 3:
+                return "maart";
+            case 4:
+                return "april";
+            case 5:
+                return "mei";
+            case 6:
+                return "juni";
+            case 7:
+                return "juli";
+            case 8:
+                return "augustus";
+            case 9:
+                return "september";
+            case 10:
+                return "oktober";
+            case 11:
+                return "november";
+            case 12:
+                return "december";
+            default:
+                return month;
+        }
+    }
+
+    function openingHoursToText(hours) {
+        if (hours["opening_hours_start"] == 0 && hours["opening_hours_end"] == 0) {
+            return "gesloten";
+        }
+        else {
+            return hours["opening_hours_start"] + "<sup>e</sup> - " + hours["opening_hours_end"] + "<sup>e</sup> uur";
+        }
+    }
+    </script>

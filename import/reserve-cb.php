@@ -112,27 +112,32 @@
                     returnData("Je reservering is geplaatst, maar ".$zermeloManagerName." <b>kon niet op de hoogte worden gebracht van de lokaalwijziging</b>. E-mail zelf om de wijziging in het rooster door te voeren: <a href='mailto:".$zermeloManagerEmail."' target='_blank'>".$zermeloManagerEmail."</a>", null);
                 }
                 else {
-                    setlocale(LC_ALL, 'nl_NL');
-                    $mail = new PHPMailer();
-                    $mail->isSMTP();
-                    $mail->Host = $smtpHost;
-                    $mail->Port = $smtpPort;
-                    $mail->SMTPSecure = $smtpSecure;
-                    $mail->SMTPAuth = true;
-                    $mail->Username = $smtpUsername;
-                    $mail->Password = $smtpPassword;
-                    $mail->setFrom($smtpUsername, $smtpName);
-                    $mail->addReplyTo($contactEmail, $contactName);
-                    $mail->addAddress($zermeloManagerEmail, $zermeloManagerName);
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Nieuwe reservering van '.$_SESSION["user"]["code"].' voor '.$cart["name"].' op '.$_POST["date"].', het '.$_POST["hour"].'e uur';
-                    $mail->Body = 'Dag '.$zermeloManagerName.',<br><br><b>'.$_SESSION["user"]["code"].'</b> heeft een reservering geplaatst via het <a href="'.$portalUrl.'">Device Portal</a> voor <b>'.$cart["name"].'</b>, op <b>'.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur</b>. Kun jij deze lokaalwijziging doorvoeren in Zermelo?<br><br><br><small>Dit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar <a href="mailto:'.$contactEmail.'">'.$contactEmail.'</a>.</small>';
-                    $mail->AltBody = 'Dag '.$zermeloManagerName.',\n\n'.$_SESSION["user"]["code"].' heeft een reservering geplaatst via het Device Portal voor '.$cart["name"].', op '.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur. Kun jij deze lokaalwijziging doorvoeren in Zermelo?\n\n\n\nDit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar '.$contactEmail.'.';
-                    if (!$mail->send()) {
-                        returnData("Je reservering is geplaatst, maar ".$zermeloManagerName." <b>kon niet op de hoogte worden gebracht van de lokaalwijziging</b>. E-mail zelf om de wijziging in het rooster door te voeren: <a href='mailto:".$zermeloManagerEmail."' target='_blank'>".$zermeloManagerEmail."</a>", null);
+                    if (isset($_POST["skip_mail"]) && $_POST["skip_mail"] == "true") {
+                        returnData("Je reservering is geplaatst.", null);
                     }
                     else {
-                        returnData("Je reservering is geplaatst en ".$zermeloManagerName." is op de hoogte gebracht van de lokaalwijziging. Deze zal zo spoedig mogelijk worden doorgevoerd in het rooster op Zermelo.", null);
+                        setlocale(LC_ALL, 'nl_NL');
+                        $mail = new PHPMailer();
+                        $mail->isSMTP();
+                        $mail->Host = $smtpHost;
+                        $mail->Port = $smtpPort;
+                        $mail->SMTPSecure = $smtpSecure;
+                        $mail->SMTPAuth = true;
+                        $mail->Username = $smtpUsername;
+                        $mail->Password = $smtpPassword;
+                        $mail->setFrom($smtpUsername, $smtpName);
+                        $mail->addReplyTo($contactEmail, $contactName);
+                        $mail->addAddress($zermeloManagerEmail, $zermeloManagerName);
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Nieuwe reservering van '.$_SESSION["user"]["code"].' voor '.$cart["name"].' op '.$_POST["date"].', het '.$_POST["hour"].'e uur';
+                        $mail->Body = 'Dag '.$zermeloManagerName.',<br><br><b>'.$_SESSION["user"]["code"].'</b> heeft een reservering geplaatst via het <a href="'.$portalUrl.'">Device Portal</a> voor <b>'.$cart["name"].'</b>, op <b>'.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur</b>. Kun jij deze lokaalwijziging doorvoeren in Zermelo?<br><br><br><small>Dit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar <a href="mailto:'.$contactEmail.'">'.$contactEmail.'</a>.</small>';
+                        $mail->AltBody = 'Dag '.$zermeloManagerName.',\n\n'.$_SESSION["user"]["code"].' heeft een reservering geplaatst via het Device Portal voor '.$cart["name"].', op '.strftime("%A %e %B", strtotime($_POST["date"])).', het '.$_POST["hour"].'<sup>e</sup> uur. Kun jij deze lokaalwijziging doorvoeren in Zermelo?\n\n\n\nDit is een geautomatiseerd bericht vanuit het Device Portal. Mocht je een vraag of opmerking hebben, stuur dan een mailtje naar '.$contactEmail.'.';
+                        if (!$mail->send()) {
+                            returnData("Je reservering is geplaatst, maar ".$zermeloManagerName." <b>kon niet op de hoogte worden gebracht van de lokaalwijziging</b>. E-mail zelf om de wijziging in het rooster door te voeren: <a href='mailto:".$zermeloManagerEmail."' target='_blank'>".$zermeloManagerEmail."</a>", null);
+                        }
+                        else {
+                            returnData("Je reservering is geplaatst en ".$zermeloManagerName." is op de hoogte gebracht van de lokaalwijziging. Deze zal zo spoedig mogelijk worden doorgevoerd in het rooster op Zermelo.", null);
+                        }
                     }
                 }
             }
