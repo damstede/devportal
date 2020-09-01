@@ -189,6 +189,7 @@
             if (!empty($cartId)) {
                 $sql .= " AND cart_id=".intval($cartId);
             }
+            $sql .= " ORDER BY hour";
             $result = $this->runQuery($sql);
             while ($row = mysqli_fetch_assoc($result)) {
                 array_push($reservations, $this->formatReservation($row));

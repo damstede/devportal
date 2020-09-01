@@ -101,25 +101,40 @@
             refBtn.disabled = true;
             refIcn.className = "awesome fa-spin";
 
+            resList.style.opacity = "0.2";
+
             resXhr = new XMLHttpRequest();
-            resXhr.open('GET', 'https://devices.damstede.eu/import/dschedule.php?cart=5&year='+now.getYear()+"&week="+weekNumber);
+            resXhr.open('GET', 'https://devices.damstede.eu/import/dschedule.php?cart=5&year='+now.getFullYear()+"&week="+weekNumber);
             resXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             resXhr.onload = function() {
                 var response = JSON.parse(resXhr.responseText);
-                resList.innerHTML = "";
-
-                if (response["data"].length > 0) {
-
-                }
-                else {
-                    resList.innerHTML = "<i>Geen reserveringen gevonden.</i>";
-                }
 
                 setTimeout(function() {
                     // timeout to make sure it feels as if the loading took a while even though it didn't
                     // especially useful when there are no reservations on the list
+                    resList.innerHTML = "";
+                    if (response["data"].length > 0) {
+                        var actualList = document.createElement("ul");
+                        for (var al = 0; al < response["data"].length; al++)
+                        {
+                            var listItem = document.createElement("li");
+                            if (response["data"][al]["cancelled"])
+                            {
+                                listItem.style.textDecoration = "line-through";
+                                listItem.setAttribute("title", "Deze reservering is geannuleerd");
+                            }
+                            listItem.innerHTML = response["data"][al]["hour"] + "<sup>e</sup> uur, <i>" + response["data"][al]["teacher"] + "</i>, " + response["data"][al]["amount"] + " plaatsen";
+                            actualList.appendChild(listItem);
+                        }
+                        resList.appendChild(actualList);
+                    }
+                    else {
+                        resList.innerHTML = "<i>Geen reserveringen gevonden.</i>";
+                    }
+
                     refBtn.disabled = false;
                     refIcn.className = "awesome";
+                    resList.style.opacity = null;
                     refInterval = setInterval(refreshReservations, 60000);
                 }, 600);
             };
